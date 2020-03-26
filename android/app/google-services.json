@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "567352377074",
+    "firebase_url": "https://project1-93417.firebaseio.com",
+    "project_id": "project1-93417",
+    "storage_bucket": "project1-93417.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567352377074:android:f8627826d08855ccc3da6b",
+        "android_client_info": {
+          "package_name": "com.cazzzer.project1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567352377074-s6snp2npuvpmsh5b9anml6l6bpq604jl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBWWp95JYNB9-Xz21IyVpbAp0ZekYtZUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567352377074-s6snp2npuvpmsh5b9anml6l6bpq604jl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
