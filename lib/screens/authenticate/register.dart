@@ -17,8 +17,8 @@ class _RegisterState extends State<Register> {
   bool loading = false;
 
   // text field state
-  String first = '';
-  String last = '';
+  String firstName = '';
+  String lastName = '';
   String username = '';
   String email = '';
   String password = '';
@@ -48,22 +48,25 @@ class _RegisterState extends State<Register> {
           child: Column(
             children: <Widget>[
               //SizedBox(height: 20.0),
+              // first name text box
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "First Name"),
                 validator: (val) => val.isEmpty ? "Enter your first name" : null,
                 onChanged: (val) {
-                  setState(() => first = val);
+                  setState(() => firstName = val);
                 }
               ),
               //SizedBox(height: 20.0),
+              // last name text box
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Last Name"),
                 validator: (val) => val.isEmpty ? "Enter your last name" : null,
                 onChanged: (val) {
-                  setState(() => last = val);
+                  setState(() => lastName = val);
                 }
               ),
               //SizedBox(height: 20.0),
+              // email text box
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Email"),
                 validator: (val) => val.isEmpty ? "Enter an email" : null,
@@ -72,6 +75,7 @@ class _RegisterState extends State<Register> {
                 }
               ),
               //SizedBox(height: 20.0),
+              // username text box
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Username"),
                 validator: (val) => val.isEmpty ? "Enter a username" : null,
@@ -80,6 +84,7 @@ class _RegisterState extends State<Register> {
                 }
               ),
               //SizedBox(height: 20.0),
+              // password text box
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Password"),
                 validator: (val) => val.length < 6 ? "Enter a password 6+ symbols long" : ((val != confirmPassword) ? "Passwords don't match" : null),
@@ -89,6 +94,7 @@ class _RegisterState extends State<Register> {
                 }
               ),
               //SizedBox(height: 20.0),
+              // confirm password text box
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Confirm Password"),
                 validator: (val) => ((val != confirmPassword) ? "Passwords don't match" : null),
@@ -98,13 +104,14 @@ class _RegisterState extends State<Register> {
                 }
               ),
               //SizedBox(height: 20.0),
+              // register button
               RaisedButton(
                 color: Colors.pink[400],
                 child: Text("Register", style: TextStyle(color: Colors.white)),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     setState(() => loading = true);
-                    dynamic result = await _auth.registerWithEmailAndPassword(email, password, first);
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password, firstName, lastName, username);
                     if (result == null) {
                       setState(() { 
                         error = 'error has occured';

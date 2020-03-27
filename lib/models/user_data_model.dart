@@ -1,7 +1,7 @@
 class UserDataModel {
-  final String name;
-  final String sugars;
-  final int strength;
+  final String firstName;
+  final String lastName;
+  final String username;
 
-  UserDataModel({this.name, this.sugars, this.strength});
+  UserDataModel({this.firstName, this.lastName, this.username});
 }

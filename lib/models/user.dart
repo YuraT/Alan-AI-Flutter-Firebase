@@ -6,9 +6,9 @@ class User {
 class CurrentUserData {
 
   final String uid;
-  final String name;
-  final int strength;
-  final String sugars;
+  final String firstName;
+  final String lastName;
+  final String username;
 
-  CurrentUserData({this.uid, this.name, this.strength, this.sugars});
+  CurrentUserData({this.uid, this.firstName, this.lastName, this.username});
 }

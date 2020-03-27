@@ -15,9 +15,9 @@ class _SettingsFormState extends State<SettingsForm> {
   final List<String> sugars = ['0','1','2','3','4'];
 
   // form values
-  String _currentName;
-  String _currentSugars;
-  int _currentStrength;
+  String _currentFirstName;
+  String _currentLastName;
+  String _currentUsername;
   
   @override
   Widget build(BuildContext context) {
@@ -37,14 +37,28 @@ class _SettingsFormState extends State<SettingsForm> {
                 ),
                 SizedBox(height: 20.0,),
                 TextFormField(
-                  initialValue: currentUser.name,
+                  initialValue: currentUser.firstName,
                   decoration: textInputDecoration,
-                  validator: (val) => val.isEmpty ? "Please enter a name" : null,
-                  onChanged: (val) => setState(() => _currentName = val),
+                  validator: (val) => val.isEmpty ? "Please enter first name" : null,
+                  onChanged: (val) => setState(() => _currentFirstName = val),
                 ),
                 SizedBox(height: 20.0,),
+                TextFormField(
+                  initialValue: currentUser.lastName,
+                  decoration: textInputDecoration,
+                  validator: (val) => val.isEmpty ? "Please enter last name" : null,
+                  onChanged: (val) => setState(() => _currentLastName = val),
+                ),
+                SizedBox(height: 20.0,),
+                TextFormField(
+                  initialValue: currentUser.username,
+                  decoration: textInputDecoration,
+                  validator: (val) => val.isEmpty ? "Please enter username name" : null,
+                  onChanged: (val) => setState(() => _currentUsername = val),
+                ),
                 // dropdown menu
-                DropdownButtonFormField(
+                // not in use anymore
+                /*DropdownButtonFormField(
                   decoration: textInputDecoration,
                   value: _currentSugars ?? currentUser.sugars,
                   items: sugars.map((sugar) {
@@ -54,9 +68,10 @@ class _SettingsFormState extends State<SettingsForm> {
                     );
                   }).toList(), 
                   onChanged: (val) => setState(() => _currentSugars = val),
-                  ),
-                // slider to be added
-                Slider(
+                  ),*/
+                // slider
+                // also not in use anymore
+                /*Slider(
                   value: (_currentStrength ?? currentUser.strength).toDouble(),
                   activeColor: Colors.brown[_currentStrength ?? currentUser.strength],
                   inactiveColor: Colors.brown[_currentStrength ?? currentUser.strength],
@@ -64,7 +79,7 @@ class _SettingsFormState extends State<SettingsForm> {
                   max: 900,
                   divisions: 8,
                   onChanged: (val) => setState(() => _currentStrength = val.round()),
-                ),
+                ),*/
                 RaisedButton(
                   color: Colors.pink[400],
                   child: Text(
@@ -74,9 +89,9 @@ class _SettingsFormState extends State<SettingsForm> {
                   onPressed: () async {
                     if(_formkey.currentState.validate()) {
                       await DatabaseService(uid: currentUser.uid).updateUserData(
-                        _currentSugars?? currentUser.sugars, 
-                        _currentName?? currentUser.name, 
-                        _currentStrength?? currentUser.strength
+                        _currentFirstName?? currentUser.firstName, 
+                        _currentLastName?? currentUser.lastName, 
+                        _currentUsername?? currentUser.username,
                         );
                       Navigator.pop(context);
                     }

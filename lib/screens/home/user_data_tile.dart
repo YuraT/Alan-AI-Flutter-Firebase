@@ -12,12 +12,8 @@ class UserDataTile extends StatelessWidget {
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
         child: ListTile(
-          leading: CircleAvatar(
-            radius: 25.0,
-            backgroundColor: Colors.brown[userData.strength],
-            ),
-            title: Text(userData.name),
-            subtitle: Text("Takes ${userData.sugars} sugar"),
+            title: Text(userData.username),
+            subtitle: Text("First Name: ${userData.firstName}, Last Name: ${userData.lastName}"),
         ),
       ),
     );
