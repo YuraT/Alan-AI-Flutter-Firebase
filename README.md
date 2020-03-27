@@ -3,11 +3,7 @@ From the Flutter-Firebase tutorials, with some modifications for the Alan app
 
 ## Important Things That Need to be Noted
 
-I haven't modified the full class structure for the users to fit the app yet
-
-The register screen doesn't actually do anything with the information in the last name and username fields, t1he auth works only with email
-
-The home screen of the app has not been modified
+The auth works only with email
 
 ## Getting Started
 
