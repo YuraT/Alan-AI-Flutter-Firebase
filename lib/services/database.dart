@@ -6,9 +6,9 @@ class DatabaseService {
   final String uid;
   DatabaseService({this.uid});
 
-  // collection reference
+  // collection references
   final CollectionReference usersCollection = Firestore.instance.collection("users");
-  final CollectionReference usernamesCollection = Firestore.instance.collection("usernames");
+  //final CollectionReference usernamesCollection = Firestore.instance.collection("usernames");
 
 
   Future updateUserData(String firstName, String lastName, String username) async {
@@ -37,12 +37,25 @@ class DatabaseService {
 
   // currentUserData from snapshot
   CurrentUserData _currentUserDataFromSnapshot(DocumentSnapshot snapshot) {
+    //print("tasks reference:   " + snapshot.data["tasks"]);
     return CurrentUserData(
       uid: uid,
+      //tasks: _tasksListFromSnapshot(snapshot),
+      tasks: [Task(name: "task1", description: "desc1", time: 100), Task(name: "task2", description: "desc2", time: 143)].toList(),
       firstName: snapshot.data["firstName"],
       lastName: snapshot.data["lastName"],
       username: snapshot.data["username"]
     );
+  }
+
+  List<Task> _tasksListFromSnapshot(DocumentSnapshot snapshot) {
+    return snapshot.data["tasks"].forEach((task) {
+      return Task(
+        name: task.name,
+        description: task.description,
+        time: task.time
+        );
+    }).toList();
   }
 
   Stream<CurrentUserData> get currentUserData {
