@@ -22,7 +22,11 @@ class AuthService {
     try {
       AuthResult result = await _auth.signInAnonymously();
       FirebaseUser user = result.user;
-
+//
+//
+// What does the use of (e) do?
+//
+//
       return _userFromFirebaseUser(user);
     } catch(e) {
       print(e.toString());
