@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
+import 'package:project1/screens/home/group_data_tile.dart';
 import 'package:project1/models/user_data_model.dart';
 import 'package:project1/screens/home/user_data_tile.dart';
 import 'package:provider/provider.dart';
@@ -30,16 +31,7 @@ class _GroupsDataListState extends State<GroupsDataList> {
           shrinkWrap: true,
           itemCount: groupsData.length,
           itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: Card(
-              margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-              child: ListTile(
-                title: Text("Group: ${groupsData[index].name}"),
-                subtitle: Text("users: ${groupsData[index].users[0].toString()}, admins: ${groupsData[index].admins[0].toString()}"),
-              ),
-            ),
-          );
+          return GroupDataTile(groupData: groupsData[index]);
           },
         ),
 
