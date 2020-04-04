@@ -12,7 +12,7 @@ class SettingsForm extends StatefulWidget {
 
 class _SettingsFormState extends State<SettingsForm> {
   final _formkey = GlobalKey<FormState>();
-  final List<String> sugars = ['0','1','2','3','4'];
+  //final List<String> sugars = ['0','1','2','3','4'];
 
   // form values
   String _currentFirstName;
@@ -25,8 +25,10 @@ class _SettingsFormState extends State<SettingsForm> {
     return StreamBuilder<CurrentUserData>(
       stream: DatabaseService(uid: user.uid).currentUserData,
       builder: (context, snapshot) {
+        print(snapshot.hasData);
         if(snapshot.hasData) {
           CurrentUserData currentUser = snapshot.data;
+          print(currentUser.tasks[0].time);
           return Form(
             key: _formkey,
             child: Column(
@@ -103,7 +105,6 @@ class _SettingsFormState extends State<SettingsForm> {
         } else {
           return Loading();
         }
-        
       }
     );
   }
