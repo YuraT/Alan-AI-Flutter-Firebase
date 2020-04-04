@@ -15,12 +15,12 @@ class _GroupsDataListState extends State<GroupsDataList> {
   Widget build(BuildContext context) {
     final groupsData = Provider.of<List<GroupDataModel>>(context) ?? [];
     final usersData = Provider.of<List<UserDataModel>>(context)?? [];
-    groupsData.forEach((groupData) {
+    /*groupsData.forEach((groupData) {
       print(groupData.name);
       print(groupData.users);
       print(groupData.admins);
       return Text("something");
-    });
+    });*/
 
     //List<dynamic> lists = [groupsData, usersData];
     return Column(

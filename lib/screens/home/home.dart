@@ -3,7 +3,7 @@ import 'package:project1/models/user_data_model.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/screens/home/settings_form.dart';
-import 'package:project1/screens/home/users_data_list.dart';
+//import 'package:project1/screens/home/users_data_list.dart'; doesnt need to be here atm
 import 'package:project1/services/auth.dart';
 import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +22,7 @@ final AuthService _auth = AuthService();
       });
     } 
 
+    // this code is not used anymore for now
     /*return StreamProvider<List<UserDataModel>>.value(
       value: DatabaseService().users,
       child: Scaffold(

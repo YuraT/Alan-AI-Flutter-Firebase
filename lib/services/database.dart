@@ -11,7 +11,7 @@ class DatabaseService {
   final CollectionReference usersCollection = Firestore.instance.collection("users");
   final CollectionReference groupsCollection = Firestore.instance.collection("groups");
   //final CollectionReference usernamesCollection = Firestore.instance.collection("usernames");
-
+  // the usernames collection was going to be used to have login with username, but I didn't get around to it
 
   Future updateUserData(String firstName, String lastName, String username) async {
     return await usersCollection.document(uid).setData( {
@@ -48,17 +48,17 @@ class DatabaseService {
     }).toList();
   }
   
-  // 
+  // get collection stream for group collection
   Stream<List<GroupDataModel>> get groups {
     return groupsCollection.snapshots().map(_groupsDataListFromSnapshot);
   }
 
   // currentUserData from snapshot
   CurrentUserData _currentUserDataFromSnapshot(DocumentSnapshot snapshot) {
-    //print("tasks reference:   " + snapshot.data["tasks"]);
+    //print("tasks reference:   " + snapshot.data["tasks"]); // doesn't work yet
     return CurrentUserData(
       uid: uid,
-      //tasks: _tasksListFromSnapshot(snapshot),
+      //tasks: _tasksListFromSnapshot(snapshot), // doesn't work yet either
       tasks: [Task(name: "task1", description: "desc1", time: 100), Task(name: "task2", description: "desc2", time: 143)].toList(),
       firstName: snapshot.data["firstName"],
       lastName: snapshot.data["lastName"],
@@ -66,6 +66,7 @@ class DatabaseService {
     );
   }
 
+  // All of this tasks junk doesn't work yet, probably because I'm dumb
   List<Task> _tasksListFromSnapshot(DocumentSnapshot snapshot) {
     return snapshot.data["tasks"].forEach((task) {
       return Task(
