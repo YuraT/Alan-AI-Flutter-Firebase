@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
 
@@ -8,6 +9,7 @@ class DatabaseService {
 
   // collection references
   final CollectionReference usersCollection = Firestore.instance.collection("users");
+  final CollectionReference groupsCollection = Firestore.instance.collection("groups");
   //final CollectionReference usernamesCollection = Firestore.instance.collection("usernames");
 
 
@@ -33,6 +35,22 @@ class DatabaseService {
   // get collection stream
   Stream<List<UserDataModel>> get users {
     return usersCollection.snapshots().map(_usersDataListFromSnapshot);
+  }
+
+  // group data model list from snsapshots (all groups)
+  List<GroupDataModel> _groupsDataListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return GroupDataModel(
+        name: doc.data["name"],
+        users: List.from(doc.data["users"]),
+        admins: List.from(doc.data["admins"]),
+      );
+    }).toList();
+  }
+  
+  // 
+  Stream<List<GroupDataModel>> get groups {
+    return groupsCollection.snapshots().map(_groupsDataListFromSnapshot);
   }
 
   // currentUserData from snapshot
