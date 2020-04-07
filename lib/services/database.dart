@@ -25,6 +25,7 @@ class DatabaseService {
   List<UserDataModel> _usersDataListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return UserDataModel(
+        uid: doc.documentID ?? '',
         firstName: doc.data["firstName"] ?? '',
         lastName: doc.data["lastName"] ?? '',
         username: doc.data["username"] ?? '',
@@ -50,7 +51,7 @@ class DatabaseService {
   
   // get collection stream for group collection
   Stream<List<GroupDataModel>> get groups {
-    return groupsCollection.snapshots().map(_groupsDataListFromSnapshot);
+    return groupsCollection.where("users", arrayContains: uid).snapshots().map(_groupsDataListFromSnapshot);
   }
 
   // currentUserData from snapshot
