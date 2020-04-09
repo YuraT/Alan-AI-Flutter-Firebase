@@ -25,10 +25,10 @@ class _SettingsFormState extends State<SettingsForm> {
     return StreamBuilder<CurrentUserData>(
       stream: DatabaseService(uid: user.uid).currentUserData,
       builder: (context, snapshot) {
-        print(snapshot.hasData);
+        // print(snapshot.hasData);
         if(snapshot.hasData) {
           CurrentUserData currentUser = snapshot.data;
-          print(currentUser.tasks[0].time);
+          // print(currentUser.tasks[0].time);
           return Form(
             key: _formkey,
             child: Column(
