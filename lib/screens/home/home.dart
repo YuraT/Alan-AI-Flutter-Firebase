@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
-import 'package:project1/screens/home/groups_list.dart';
+import 'package:project1/screens/home/groups_data_list.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/screens/home/settings_form.dart';
 //import 'package:project1/screens/home/users_data_list.dart'; doesnt need to be here atm
