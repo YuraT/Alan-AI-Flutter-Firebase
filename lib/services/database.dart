@@ -39,7 +39,7 @@ class DatabaseService {
     return usersCollection.snapshots().map(_usersDataListFromSnapshot);
   }
 
-  // group data model list from snsapshots
+  // group data model list from snsapshot
   List<GroupDataModel> _groupsDataListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return GroupDataModel(
@@ -56,8 +56,7 @@ class DatabaseService {
     return groupsCollection.where("users", arrayContains: uid).snapshots().map(_groupsDataListFromSnapshot);
   }
 
-  // All of this tasks junk doesn't work yet, probably because I'm dumb
-  // alright now all I should have to do is copy the stuff for groups above and change it for tasks
+  // task data model list from snapshot
   List<TaskDataModel> _tasksListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return TaskDataModel(
@@ -70,8 +69,10 @@ class DatabaseService {
       );
     }).toList();
   }
+  // get collection stream for tasks, where group is equal to provided group uid (if it is provided)
   Stream<List<TaskDataModel>> get tasks {
     return tasksCollection.where("group", isEqualTo: group).snapshots().map(_tasksListFromSnapshot);
+    // I think I should also add a .where() for a user uid later
   }
 
   // currentUserData from snapshot
@@ -79,6 +80,8 @@ class DatabaseService {
     //print("tasks reference:   " + snapshot.data["tasks"]); // doesn't work yet
     return CurrentUserData(
       uid: uid,
+      // the tasks stuff in this function was inteded to provide a list of tasks specific to current user
+      // Im not sure if I will keep this stuff here or find a different way to do it
       //tasks: _tasksListFromSnapshot(snapshot), // doesn't work yet either
       tasks: [TaskDataModel(title: "task1", description: "desc1", deadline: DateTime.utc(2020, 4, 26, 14, 0)), TaskDataModel(title: "task2", description: "desc2", deadline: DateTime.utc(2020, 4, 19, 14, 0))],
       firstName: snapshot.data["firstName"],

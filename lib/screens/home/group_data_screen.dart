@@ -26,24 +26,3 @@ class GroupDataScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-/*class GroupDataScreen extends StatefulWidget {
-  @override
-  _GroupDataScreenState createState() => _GroupDataScreenState();
-}
-
-class _GroupDataScreenState extends State<GroupDataScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("users screen"),
-        backgroundColor: Colors.brown[400],
-        elevation: 0.0,
-      ),
-      body: Text("something"),
-    );
-  }
-}*/
