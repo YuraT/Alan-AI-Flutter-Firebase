@@ -58,7 +58,7 @@ final AuthService _auth = AuthService();
         StreamProvider<List<UserDataModel>>.value(
           value: DatabaseService().users),
         StreamProvider<List<GroupDataModel>>.value(
-          value: DatabaseService(uid: user.uid).groups),
+          value: DatabaseService(userUid: user.uid).groups),
       ],
       child: Scaffold(
       backgroundColor: Colors.brown[50],

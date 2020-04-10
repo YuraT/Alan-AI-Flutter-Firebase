@@ -11,17 +11,33 @@ class GroupDataScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
     return StreamProvider<List<TaskDataModel>>.value(
-      value: DatabaseService(group: groupData.uid).tasks,
+      // userUid is only specified if the user is not included in the admins list of the group, who should be able to see all tasks
+      value: DatabaseService(groupUid: groupData.uid, userUid: (groupData.admins.contains(user.uid) ? null : user.uid)).tasks,
       child: Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         title: Text(groupData.name),
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
+        actions: <Widget>[
+          //if(groupData.admins.contains(user.uid)) {
+            new FlatButton.icon(
+            icon: Icon(Icons.add), 
+            label: Text("Add Task"),
+            //onPressed: () => (), 
+            )
+          //}
+        ],
           ),
       body: 
-        TasksDataList(),
+        Column(
+          children: <Widget>[
+            Text(groupData.admins.contains(user.uid).toString()),
+            TasksDataList(),
+          ],
+        ),
       )
     );
   }

@@ -6,7 +6,7 @@ class User {
 class CurrentUserData {
 
   final String uid;
-  final List<TaskDataModel> tasks;
+  final List<String> tasks;
   final String firstName;
   final String lastName;
   final String username;
