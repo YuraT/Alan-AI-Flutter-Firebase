@@ -15,7 +15,7 @@ class TaskDataTile extends StatelessWidget {
           children: <Widget>[
             ListTile(
               title: Text("Task: ${taskData.title}"),
-              subtitle: Text("Desc: ${taskData.description}, \nusers: ${taskData.users}"),
+              subtitle: Text("Desc: ${taskData.description}, \nassigner: ${taskData.assigner}, \nusers: ${taskData.users}, \ndeadline:${taskData.deadline}"),
             ),
           ],
         ),

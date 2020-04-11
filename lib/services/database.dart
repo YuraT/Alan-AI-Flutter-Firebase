@@ -4,9 +4,9 @@ import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
 
 class DatabaseService {
-  final String uid;
-  final String group;
-  DatabaseService({this.uid, this.group});
+  final String userUid;
+  final String groupUid;
+  DatabaseService({this.userUid, this.groupUid});
 
   // collection references
   final CollectionReference usersCollection = Firestore.instance.collection("users");
@@ -15,8 +15,20 @@ class DatabaseService {
   //final CollectionReference usernamesCollection = Firestore.instance.collection("usernames");
   // the usernames collection above was going to be used to have login with username, but I didn't get around to it
 
+  Future createTask(String title, String description, String group, String assigner, List<String> users, DateTime deadline, bool completedStatus) async {
+    return await tasksCollection.document().setData({
+      "title": title,
+      "description": description,
+      "group": group,
+      "assigner": assigner,
+      "users": users,
+      "deadline": deadline,
+      "completedStatus": completedStatus,
+    });
+  }
+
   Future updateUserData(String firstName, String lastName, String username) async {
-    return await usersCollection.document(uid).setData( {
+    return await usersCollection.document(userUid).setData( {
       "firstName" : firstName,
       "lastName" : lastName,
       "username" : username,
@@ -53,7 +65,7 @@ class DatabaseService {
   // get collection stream for group collection
   Stream<List<GroupDataModel>> get groups {
     // its good to know that if uid == null, the where method just wont do anything
-    return groupsCollection.where("users", arrayContains: uid).snapshots().map(_groupsDataListFromSnapshot);
+    return groupsCollection.where("users", arrayContains: userUid).snapshots().map(_groupsDataListFromSnapshot);
   }
 
   // task data model list from snapshot
@@ -64,33 +76,34 @@ class DatabaseService {
         description: doc.data["description"],
         assigner: doc.data["assigner"],
         users: List.from(doc.data["users"]),
-        deadline: DateTime.utc(2020, 4, 26, 14, 0),//doc.data["deadline"],
+        deadline: /*DateTime.utc(2020, 4, 26, 14, 0),*/doc.data["deadline"].toDate(),
         completedStatus: doc.data["completedStatus"],
       );
     }).toList();
   }
   // get collection stream for tasks, where group is equal to provided group uid (if it is provided)
   Stream<List<TaskDataModel>> get tasks {
-    return tasksCollection.where("group", isEqualTo: group).snapshots().map(_tasksListFromSnapshot);
-    // I think I should also add a .where() for a user uid later
+    return tasksCollection.where("group", isEqualTo: groupUid).where("users", arrayContains: userUid).snapshots().map(_tasksListFromSnapshot);
   }
 
   // currentUserData from snapshot
-  CurrentUserData _currentUserDataFromSnapshot(DocumentSnapshot snapshot) {
+  CurrentUserData _currentUserDataFromSnapshot(DocumentSnapshot documentSnapshot) {
     //print("tasks reference:   " + snapshot.data["tasks"]); // doesn't work yet
     return CurrentUserData(
-      uid: uid,
+      uid: userUid,
       // the tasks stuff in this function was inteded to provide a list of tasks specific to current user
       // Im not sure if I will keep this stuff here or find a different way to do it
       //tasks: _tasksListFromSnapshot(snapshot), // doesn't work yet either
-      tasks: [TaskDataModel(title: "task1", description: "desc1", deadline: DateTime.utc(2020, 4, 26, 14, 0)), TaskDataModel(title: "task2", description: "desc2", deadline: DateTime.utc(2020, 4, 19, 14, 0))],
-      firstName: snapshot.data["firstName"],
-      lastName: snapshot.data["lastName"],
-      username: snapshot.data["username"]
+      //tasks: [TaskDataModel(title: "task1", description: "desc1", deadline: DateTime.utc(2020, 4, 26, 14, 0)), TaskDataModel(title: "task2", description: "desc2", deadline: DateTime.utc(2020, 4, 19, 14, 0))],
+      //tasks: List.from(documentSnapshot.data["tasks"]),
+      // holy crap all of that is absolute trash but Ill leave it there just in case I decide to use it later
+      firstName: documentSnapshot.data["firstName"],
+      lastName: documentSnapshot.data["lastName"],
+      username: documentSnapshot.data["username"]
     );
   }
   Stream<CurrentUserData> get currentUserData {
-    return usersCollection.document(uid).snapshots().map(_currentUserDataFromSnapshot);
+    return usersCollection.document(userUid).snapshots().map(_currentUserDataFromSnapshot);
   }
 
 }

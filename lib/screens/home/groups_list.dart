@@ -5,12 +5,12 @@ import 'package:project1/models/user_data_model.dart';
 import 'package:project1/screens/home/user_data_tile.dart';
 import 'package:provider/provider.dart';
 
-class GroupsDataList extends StatefulWidget {
+class GroupsList extends StatefulWidget {
   @override
-  _GroupsDataListState createState() => _GroupsDataListState();
+  _GroupsListState createState() => _GroupsListState();
 }
 
-class _GroupsDataListState extends State<GroupsDataList> {
+class _GroupsListState extends State<GroupsList> {
   @override
   Widget build(BuildContext context) {
     final groupsData = Provider.of<List<GroupDataModel>>(context) ?? [];
