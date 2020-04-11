@@ -15,6 +15,18 @@ class DatabaseService {
   //final CollectionReference usernamesCollection = Firestore.instance.collection("usernames");
   // the usernames collection above was going to be used to have login with username, but I didn't get around to it
 
+  Future createTask(String title, String description, String group, String assigner, List<String> users, DateTime deadline, bool completedStatus) async {
+    return await tasksCollection.document().setData({
+      "title": title,
+      "description": description,
+      "group": group,
+      "assigner": assigner,
+      "users": users,
+      "deadline": deadline,
+      "completedStatus": completedStatus,
+    });
+  }
+
   Future updateUserData(String firstName, String lastName, String username) async {
     return await usersCollection.document(userUid).setData( {
       "firstName" : firstName,
@@ -64,7 +76,7 @@ class DatabaseService {
         description: doc.data["description"],
         assigner: doc.data["assigner"],
         users: List.from(doc.data["users"]),
-        deadline: DateTime.utc(2020, 4, 26, 14, 0),//doc.data["deadline"],
+        deadline: /*DateTime.utc(2020, 4, 26, 14, 0),*/doc.data["deadline"].toDate(),
         completedStatus: doc.data["completedStatus"],
       );
     }).toList();
@@ -83,7 +95,8 @@ class DatabaseService {
       // Im not sure if I will keep this stuff here or find a different way to do it
       //tasks: _tasksListFromSnapshot(snapshot), // doesn't work yet either
       //tasks: [TaskDataModel(title: "task1", description: "desc1", deadline: DateTime.utc(2020, 4, 26, 14, 0)), TaskDataModel(title: "task2", description: "desc2", deadline: DateTime.utc(2020, 4, 19, 14, 0))],
-      tasks: documentSnapshot.data["tasks"],
+      //tasks: List.from(documentSnapshot.data["tasks"]),
+      // holy crap all of that is absolute trash but Ill leave it there just in case I decide to use it later
       firstName: documentSnapshot.data["firstName"],
       lastName: documentSnapshot.data["lastName"],
       username: documentSnapshot.data["username"]
