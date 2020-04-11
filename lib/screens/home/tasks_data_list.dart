@@ -12,15 +12,16 @@ class _TasksDataListState extends State<TasksDataList> {
   @override
   Widget build(BuildContext context) {
     final tasksData = Provider.of<List<TaskDataModel>>(context) ?? [];
-    tasksData.forEach((taskData) {
+    /*tasksData.forEach((taskData) {
       print(taskData.title);
       print(taskData.description);
       print(taskData.users);
-    });
+    });*/
+
     return Column(
       children: <Widget>[
         Text("Tasks for Group"),
-        Text("(not specific to logged in user for now)"),
+        Text("(specific to logged in user now)"),
         ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
