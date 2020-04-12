@@ -32,11 +32,12 @@ class GroupDataScreen extends StatelessWidget {
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
         actions: <Widget>[
-            new FlatButton.icon(
+            FlatButton.icon(
             icon: Icon(Icons.add), 
             label: Text("Add Task"),
             onPressed: () => _showTaskAddPanel(), 
-            )
+            ),
+            // (Avnish) add button that allows getting one-use invite code to group
         ],
           ),
       body: 

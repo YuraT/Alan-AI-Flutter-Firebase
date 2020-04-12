@@ -79,6 +79,7 @@ final AuthService _auth = AuthService();
             label: Text("Settings"),
             onPressed: () => _showSettingsPanel(), 
             )
+          // (Avnish) add a button that allows to join group here, look above for button style reference
           ],
           ),
       body: 
