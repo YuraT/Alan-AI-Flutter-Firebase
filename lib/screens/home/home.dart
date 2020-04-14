@@ -9,6 +9,7 @@ import 'package:project1/screens/home/settings_form.dart';
 import 'package:project1/services/auth.dart';
 import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:project1/screens/groups/newgroup.dart';
 
 class Home extends StatelessWidget {
 final AuthService _auth = AuthService();
@@ -88,10 +89,20 @@ final AuthService _auth = AuthService();
             label: Text("Settings"),
             onPressed: () => _showSettingsPanel(), 
             ),
+//          FlatButton.icon(
+//            icon: Icon(Icons.add),
+//            label: Text("Add Group"),
+//            onPressed: () {
+//              Navigator.push<dynamic>(
+//                context,
+//                MaterialPageRoute<dynamic>(builder: (context) => NewGroup()),
+//              );
+//            },
+//          ),
           FlatButton.icon(
-            icon: Icon(Icons.add_circle_outline), 
-            label: Text("Join Group"),
-            onPressed: () => _showJoinGroupPanel(), 
+            icon: Icon(Icons.add_circle_outline),
+            label: Text("New Group"),
+            onPressed: () => _showJoinGroupPanel(),
             )
           ],
           ),
