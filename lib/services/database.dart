@@ -15,13 +15,30 @@ class DatabaseService {
   final CollectionReference invitesCollection = Firestore.instance.collection("invites");
   //final CollectionReference usernamesCollection = Firestore.instance.collection("usernames");
   // the usernames collection above was going to be used to have login with username, but I didn't get around to it
-
-  Future joinGroup(String inviteUid) async {
-    return await invitesCollection.document(inviteUid).get().then((doc) => { 
-      if (doc.exists == false) throw "invite code does not exist",
+  
+  // if there is already an invite with that group and user, return that. else create a new one
+  Future<String> getGroupInvite(String user, String group) async {
+    QuerySnapshot invites = await invitesCollection.where("creator", isEqualTo: user).where("group", isEqualTo: group).getDocuments();
+    if (invites.documents.length > 0) return invites.documents.toList()[0].documentID;
+    else return createGroupInvite(user, group);
+  }
+  Future<String> createGroupInvite(String user, String group) async {
+    DocumentReference doc = invitesCollection.document();
+    await doc.setData({
+      "active": true,
+      "creator": user,
+      "group": group,
+    });
+    return doc.documentID;
+  }
+  Future joinGroup(String user, String inviteUid) async {
+    return await invitesCollection.document(inviteUid).get().then((doc) { 
+      if (doc.exists == false) {
+        throw "invite code does not exist";
+        }
       groupsCollection.document(doc.data["group"]).updateData({
-        "users": FieldValue.arrayUnion([userUid])
-      })
+        "users": FieldValue.arrayUnion([user])
+      });
     });
   }
 

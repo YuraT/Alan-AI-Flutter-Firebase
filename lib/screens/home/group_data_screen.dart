@@ -6,7 +6,6 @@ import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/screens/home/tasks_data_list.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'dart:math';
 
 class GroupDataScreen extends StatelessWidget {
   final GroupDataModel groupData;
@@ -43,13 +42,8 @@ class GroupDataScreen extends StatelessWidget {
           FlatButton.icon(
             icon: Icon(Icons.share),
             label: Text('Join Code'),
-            onPressed: () {
-              Random random;
-              int min = 100000;
-              int max = 999999;
-              random = Random();
-              var code = min + random.nextInt(max - min);
-              String vCode = code.toString();
+            onPressed: () async {
+              String vCode = await DatabaseService().getGroupInvite(user.uid, groupData.uid);
 
               Alert(
                 context: context,
