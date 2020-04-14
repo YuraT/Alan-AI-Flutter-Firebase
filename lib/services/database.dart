@@ -12,8 +12,18 @@ class DatabaseService {
   final CollectionReference usersCollection = Firestore.instance.collection("users");
   final CollectionReference groupsCollection = Firestore.instance.collection("groups");
   final CollectionReference tasksCollection = Firestore.instance.collection("tasks");
+  final CollectionReference invitesCollection = Firestore.instance.collection("invites");
   //final CollectionReference usernamesCollection = Firestore.instance.collection("usernames");
   // the usernames collection above was going to be used to have login with username, but I didn't get around to it
+
+  Future joinGroup(String inviteUid) async {
+    return await invitesCollection.document(inviteUid).get().then((doc) => { 
+      if (doc.exists == false) throw "invite code does not exist",
+      groupsCollection.document(doc.data["group"]).updateData({
+        "users": FieldValue.arrayUnion([userUid])
+      })
+    });
+  }
 
   Future createTask(String title, String description, String group, String assigner, List<String> users, DateTime deadline, bool completedStatus) async {
     return await tasksCollection.document().setData({
