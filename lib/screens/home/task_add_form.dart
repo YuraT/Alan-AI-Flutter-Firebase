@@ -33,7 +33,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
       child: Column(
         children: <Widget>[
           Text(
-            "Update your settings",
+            "Create Task",
             style: TextStyle(fontSize: 18.0),
           ),
           SizedBox(
@@ -55,12 +55,18 @@ class _TaskAddFormState extends State<TaskAddForm> {
           SizedBox(
             height: 20.0,
           ),
-          TextFormField(
+          // (Ben) replace that TextFormField below with a dropdown list of strings
+          // Theres also dropdown menu code that is commented out further below. Its from the tutorials, perhaps you can look at it for reference
+          TextFormField( 
             decoration: textInputDecoration.copyWith(hintText: "Employees"),
             validator: (val) => val.isEmpty ? "Please enter employees" : null,
             // change [val] to proper list later, need to make this some sort of dropdown but also be able to select multiple users
             onChanged: (val) => setState(() => _currentUsers = val.split(" ")),
           ),
+
+          // (Ava) (Parul) add a date picker below (ignore all the commented code, its old stuff from the tutorials)
+
+
           // dropdown menu
           // not in use anymore
           /*DropdownButtonFormField(
@@ -88,7 +94,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
           RaisedButton(
             color: Colors.pink[400],
             child: Text(
-              "Update",
+              "Submit",
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () async {
