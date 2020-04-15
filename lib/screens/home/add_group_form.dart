@@ -5,12 +5,12 @@ import 'package:project1/models/user.dart';
 import 'package:project1/services/database.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class JoinGroupForm extends StatefulWidget {
+class AddGroupForm extends StatefulWidget {
   @override
-  _JoinGroupFormState createState() => _JoinGroupFormState();
+  _AddGroupFormState createState() => _AddGroupFormState();
 }
 
-class _JoinGroupFormState extends State<JoinGroupForm> {
+class _AddGroupFormState extends State<AddGroupForm> {
   final _joinFormkey = GlobalKey<FormState>();
   final _createFormkey = GlobalKey<FormState>();
 
