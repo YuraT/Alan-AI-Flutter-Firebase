@@ -3,7 +3,7 @@ import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/models/group_data_model.dart';
-import 'package:project1/screens/home/join_group_form.dart';
+import 'package:project1/screens/home/add_form.dart';
 import 'package:project1/screens/home/settings_form.dart';
 //import 'package:project1/screens/home/users_data_list.dart'; doesnt need to be here atm
 import 'package:project1/services/auth.dart';
@@ -24,11 +24,11 @@ final AuthService _auth = AuthService();
         );
       });
     }
-    void _showJoinGroupPanel() {
+    void _showAddGroupPanel() {
       showModalBottomSheet(context: context, builder: (context) {
         return Container(
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-          child: JoinGroupForm(),
+          child: AddGroupForm(),
         );
       });
     }
@@ -91,7 +91,7 @@ final AuthService _auth = AuthService();
           FlatButton.icon(
             icon: Icon(Icons.add_circle_outline),
             label: Text("New Group"),
-            onPressed: () => _showJoinGroupPanel(),
+            onPressed: () => _showAddGroupPanel(),
             )
           ],
           ),
