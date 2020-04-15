@@ -41,6 +41,14 @@ class DatabaseService {
       });
     });
   }
+  Future createGroup(String groupName, List<String> admins, List<String> users) {
+    return groupsCollection.document().setData({
+      "name": groupName,
+      "admins": admins,
+      "users": users,
+    });
+  }
+
 
   Future createTask(String title, String description, String group, String assigner, List<String> users, DateTime deadline, bool completedStatus) async {
     return await tasksCollection.document().setData({

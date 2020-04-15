@@ -12,9 +12,11 @@ class JoinGroupForm extends StatefulWidget {
 
 class _JoinGroupFormState extends State<JoinGroupForm> {
   final _joinFormkey = GlobalKey<FormState>();
+  final _createFormkey = GlobalKey<FormState>();
 
   // form values
   String _currentJoinCode;
+  String _currentCreateName;
 
   @override
   Widget build(BuildContext context) {
@@ -41,21 +43,39 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
                   ),
                 ),
                 onPressed: () {
+                  String error = '';
                   Alert(
                       context: context,
                       title: "New Group",
-                      content: Column(
-                        children: <Widget>[
-                          TextField(
-                            decoration: InputDecoration(
-                              labelText: 'Group Name',
+                      content: Form(
+                        key: _createFormkey,
+                        child: Column(
+                          children: <Widget>[
+                            TextFormField(
+                              validator: (val) => val.isEmpty ? "please enter group name" : null,
+                              onChanged: (val) => setState(() => _currentCreateName = val),
+                              decoration: textInputDecoration.copyWith(labelText: 'Group Name',),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       buttons: [
                         DialogButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () async {
+                          if (_createFormkey.currentState.validate()) {
+                            try {
+                              await DatabaseService().createGroup(_currentCreateName, [user.uid], [user.uid]);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            } catch (e) {
+                              // need to do better error handling here
+                              setState(() {
+                              error = e.toString();
+                              });
+                              print(error);
+                            }
+                          }
+                        },
                           child: Text(
                             "Create",
                             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -102,6 +122,7 @@ class _JoinGroupFormState extends State<JoinGroupForm> {
                           if (_joinFormkey.currentState.validate()) {
                             try {
                               await DatabaseService().joinGroup(user.uid, _currentJoinCode);
+                              Navigator.pop(context);
                               Navigator.pop(context);
                             } catch (e) {
                               // need to do better error handling here
