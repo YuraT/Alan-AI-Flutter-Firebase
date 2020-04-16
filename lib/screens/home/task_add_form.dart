@@ -113,23 +113,6 @@ class _TaskAddFormState extends State<TaskAddForm> {
               }
             },
           ),
-          Text(_currentDeadline == null? 'No date has been picked yet' : _currentDeadline.toString()),
-          RaisedButton(
-            child: Text('Pick a date'),
-            onPressed: () {
-              showDatePicker(
-                  context: context,
-                  initialDate: _currentDeadline = null ? DateTime.now() :
-                  _currentDeadline,
-                  firstDate: DateTime(2020),
-                  lastDate: DateTime(2030)
-              ).then((date) {
-                setState(() {
-                  _currentDeadline = date;
-                });
-              });
-            },
-          )
         ],
       ),
     );
