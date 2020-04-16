@@ -107,6 +107,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                   divisions: 8,
                   onChanged: (val) => setState(() => _currentStrength = val.round()),
                 ),*/
+
           RaisedButton(
             color: Colors.pink[400],
             child: Text(
