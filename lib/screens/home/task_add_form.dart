@@ -71,7 +71,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                       value: sugar,
                       child: Text("$sugar sugars"),
                     );
-                  }).toList(), 
+                  }).toList(),
                   onChanged: (val) => setState(() => _currentSugars = val),
                   ),*/
           // slider
@@ -85,6 +85,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                   divisions: 8,
                   onChanged: (val) => setState(() => _currentStrength = val.round()),
                 ),*/
+
           RaisedButton(
             color: Colors.pink[400],
             child: Text(
@@ -105,9 +106,29 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 Navigator.pop(context);
               }
             },
+          ),
+          Text(_currentDeadline == null? 'No date has been picked yet' : _currentDeadline.toString()),
+          RaisedButton(
+            child: Text('Pick a date'),
+            onPressed: () {
+              showDatePicker(
+                  context: context,
+                  initialDate: _currentDeadline = null ? DateTime.now() :
+                  _currentDeadline,
+                  firstDate: DateTime(2020),
+                  lastDate: DateTime(2030)
+              ).then((date) {
+                setState(() {
+                  _currentDeadline = date;
+                });
+              });
+            },
           )
         ],
       ),
     );
   }
 }
+
+
+
