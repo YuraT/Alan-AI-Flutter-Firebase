@@ -19,7 +19,7 @@ class GroupDataScreen extends StatelessWidget {
       showModalBottomSheet(context: context, builder: (context) {
         return Container(
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-          child: TaskAddForm(groupData: groupData,),
+          child: TaskAddForm(groupData),
         );
       });
     }

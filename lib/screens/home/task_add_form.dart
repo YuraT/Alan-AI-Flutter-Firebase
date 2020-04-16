@@ -3,13 +3,12 @@ import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/services/database.dart';
 import 'package:project1/shared/constants.dart';
-import 'package:project1/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class TaskAddForm extends StatefulWidget {
-  @override
   final GroupDataModel groupData;
-  TaskAddForm({this.groupData});
+  @override
+  TaskAddForm(this.groupData);
   _TaskAddFormState createState() => _TaskAddFormState(groupData);
 }
 
