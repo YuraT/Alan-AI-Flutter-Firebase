@@ -23,7 +23,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
   String _currentTitle;
   String _currentDescription;
   List<String> _currentUsers;
-  DateTime _currentDeadline = DateTime.utc(2020);
+  DateTime _currentDeadline; //= DateTime.utc(2020);
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +65,24 @@ class _TaskAddFormState extends State<TaskAddForm> {
           ),
 
           // (Ava) (Parul) add a date picker below (ignore all the commented code, its old stuff from the tutorials)
-
-
+          Text(_currentDeadline == null ? 'No date has been picked yet' :
+          _currentDeadline.toString()),
+          RaisedButton(
+            child: Text('Pick a date'),
+            onPressed: () {
+              showDatePicker(
+                context: context,
+                initialDate: _currentDeadline == null ? DateTime.now() :
+                _currentDeadline,
+                firstDate: DateTime(2020),
+                lastDate: DateTime(2030)
+              ).then((date) {
+                  setState(() {
+                  _currentDeadline = date;
+                });
+              });
+              },
+          ),
           // dropdown menu
           // not in use anymore
           /*DropdownButtonFormField(
@@ -91,7 +107,6 @@ class _TaskAddFormState extends State<TaskAddForm> {
                   divisions: 8,
                   onChanged: (val) => setState(() => _currentStrength = val.round()),
                 ),*/
-
           RaisedButton(
             color: Colors.pink[400],
             child: Text(
