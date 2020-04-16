@@ -29,7 +29,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return Form(
-      key: _formkey,
+      child: SingleChildScrollView(
+        child: Container(
+        key: _formkey,
       child: Column(
         children: <Widget>[
           Text(
@@ -131,6 +133,8 @@ class _TaskAddFormState extends State<TaskAddForm> {
           ),
         ],
       ),
+    ),
+    ),
     );
   }
 }
