@@ -51,7 +51,8 @@ class DatabaseService {
 
 
   Future createTask(String title, String description, String group, String assigner, List<String> users, DateTime deadline, bool completedStatus) async {
-    return await tasksCollection.document().setData({
+    try{ 
+      return tasksCollection.document().setData({
       "title": title,
       "description": description,
       "group": group,
@@ -59,7 +60,10 @@ class DatabaseService {
       "users": users,
       "deadline": deadline,
       "completedStatus": completedStatus,
-    });
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future updateUserData(String firstName, String lastName, String username) async {
