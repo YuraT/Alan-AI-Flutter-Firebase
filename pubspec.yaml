@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -27,8 +27,10 @@ dependencies:
   cloud_firestore: ^0.12.9+4
   provider: ^3.1.0
   flutter_spinkit: "^4.0.0"
+  rflutter_alert: ^1.0.2
+  #alan_voice: 1.0.1
+  #alan_voice: 0.5.0  
   alan_voice: 2.0.3  
-
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/models/group_data_model.dart';
+import 'package:project1/screens/home/add_group_form.dart';
 import 'package:project1/screens/home/settings_form.dart';
 //import 'package:project1/screens/home/users_data_list.dart'; doesnt need to be here atm
 import 'package:project1/services/auth.dart';
@@ -22,7 +23,15 @@ final AuthService _auth = AuthService();
           child: SettingsForm(),
         );
       });
-    } 
+    }
+    void _showAddGroupPanel() {
+      showModalBottomSheet(context: context, builder: (context) {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+          child: AddGroupForm(),
+        );
+      });
+    }
 
     // this code is not used anymore for now
     /*return StreamProvider<List<UserDataModel>>.value(
@@ -78,8 +87,12 @@ final AuthService _auth = AuthService();
             icon: Icon(Icons.settings), 
             label: Text("Settings"),
             onPressed: () => _showSettingsPanel(), 
+            ),
+          FlatButton.icon(
+            icon: Icon(Icons.add_circle_outline),
+            label: Text("New Group"),
+            onPressed: () => _showAddGroupPanel(),
             )
-          // (Avnish) add a button that allows to join group here, look above for button style reference
           ],
           ),
       body: 
