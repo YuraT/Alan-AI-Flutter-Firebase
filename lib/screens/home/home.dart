@@ -8,10 +8,26 @@ import 'package:project1/screens/home/settings_form.dart';
 //import 'package:project1/screens/home/users_data_list.dart'; doesnt need to be here atm
 import 'package:project1/services/auth.dart';
 import 'package:project1/services/database.dart';
+import 'package:project1/shared/alan_button.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
 final AuthService _auth = AuthService();
+  /*showOverlay(BuildContext context) {
+    OverlayState overlayState = Overlay.of(context);
+    OverlayEntry overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        bottom: 30,
+        right: 10,
+        child: CircleAvatar(
+          radius: 10,
+          backgroundColor: Colors.red,
+          child: Text("1"),
+        ),
+      ));
+    overlayState.insert(overlayEntry);
+  }*/
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +112,14 @@ final AuthService _auth = AuthService();
           ],
           ),
       body: 
-        GroupsList(),
+        SingleChildScrollView(
+                  child: Column(
+            children: <Widget>[
+              AlanButton(),
+              GroupsList(),
+            ],
+          ),
+        ),
       )
     );
   }
