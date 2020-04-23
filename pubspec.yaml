@@ -30,7 +30,8 @@ dependencies:
   rflutter_alert: ^1.0.2
   #alan_voice: 1.0.1
   #alan_voice: 0.5.0  
-  
+  alan_voice: 2.0.3  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
