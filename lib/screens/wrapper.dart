@@ -16,12 +16,10 @@ class _WrapperState extends State<Wrapper> {
   
   Future<String> _handleReadGroups(User _user) async {
       String result = "";
-      print("here");
       List<GroupDataModel> _groups = await DatabaseService(userUid: _user.uid).groupsSnapshot;
       _groups.map((group) => {
-        print("some BS + ${group.name}"),
         result += "${group.name}, "
-      });
+      }).toList();
       return result;
     }
   
@@ -31,23 +29,21 @@ class _WrapperState extends State<Wrapper> {
     
     Future<void> _handleCommand(Map<String, dynamic> command) async {
       print("command: $command");
-      // this shit doesnt work yet (I dont know how to do command handlers for now)
       // I think I might just restrucure the whole data structure to make it better for Alan (or maybe I wont)
       switch(command["command"]) {
         case "readGroups":
-          //DatabaseService(userUid: uid)
-          AlanVoice.playText("text");
-          String _groups = await _handleReadGroups(user); // this returns null and I dont know why
-          print("GROUPSTUFF: $_groups");
-          //AlanVoice.playText(_groups);
-          AlanVoice.playText("text 2");
+          Future<String> _groups = _handleReadGroups(user);
+          _groups.then((data) => {
+            AlanVoice.playText("groupdata $data")
+            }
+          );
           break;
       }
     }
     void _initAlanButton() async {
-      //init Alan with sample project id
+      // init Alan with sample project id
       AlanVoice.addButton("531dafb36d13902b724944e2c821de622e956eca572e1d8b807a3e2338fdd0dc/stage");
-      //AlanVoice.setVisualState("visuals");
+      //AlanVoice.setVisualState({"screen": "groupScreen"}.toString());
       setState(() {
         _enabled = true;
       });
@@ -56,11 +52,15 @@ class _WrapperState extends State<Wrapper> {
     }
     
     // return authenticate or home depending on user status
+    // also remove or initialize alan button
     if (user == null) {
-      _enabled = false;
+      setState(() {
+        _enabled = false; 
+        AlanVoice.clearCallbacks();
+      });
       return Authenticate();
     } else {
-      if (!_enabled) _initAlanButton();
+      if (!_enabled) setState(() {_initAlanButton();});
       return Home();
     }
   }
