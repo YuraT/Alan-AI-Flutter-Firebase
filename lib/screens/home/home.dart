@@ -8,7 +8,6 @@ import 'package:project1/screens/home/settings_form.dart';
 //import 'package:project1/screens/home/users_data_list.dart'; doesnt need to be here atm
 import 'package:project1/services/auth.dart';
 import 'package:project1/services/database.dart';
-import 'package:project1/shared/alan_button.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
@@ -113,9 +112,9 @@ final AuthService _auth = AuthService();
           ),
       body: 
         SingleChildScrollView(
-                  child: Column(
+          child: Column(
             children: <Widget>[
-              AlanButton(),
+              //AlanButton(),
               GroupsList(),
             ],
           ),

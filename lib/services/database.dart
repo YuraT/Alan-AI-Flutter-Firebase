@@ -106,6 +106,9 @@ class DatabaseService {
     // its good to know that if uid == null, the where method just wont do anything
     return groupsCollection.where("users", arrayContains: userUid).snapshots().map(_groupsDataListFromSnapshot);
   }
+  Future<List<GroupDataModel>> get groupsSnapshot async {
+    return await groupsCollection.where("users", arrayContains: userUid).getDocuments().then(_groupsDataListFromSnapshot);
+  }
 
   // task data model list from snapshot
   List<TaskDataModel> _tasksListFromSnapshot(QuerySnapshot snapshot) {
