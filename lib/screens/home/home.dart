@@ -111,14 +111,7 @@ final AuthService _auth = AuthService();
           ],
           ),
       body: 
-        SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              //AlanButton(),
-              GroupsList(),
-            ],
-          ),
-        ),
+        GroupsList(),
       )
     );
   }
