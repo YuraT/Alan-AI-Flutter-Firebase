@@ -2,11 +2,14 @@ import "package:flutter/material.dart";
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/screens/authenticate/authenticate.dart';
+import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
 import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:alan_voice/alan_voice.dart';
 
+
+final groupsDataKey = GlobalKey<GroupsListState>();
 class Wrapper extends StatefulWidget {
   @override
   _WrapperState createState() => _WrapperState();
@@ -14,12 +17,15 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   bool _enabled = false;
   
-  Future<String> _handleReadGroups(User _user) async {
+  /*Future<String>*/ String _handleReadGroups(User _user) /*async*/ {
       String result = "";
-      List<GroupDataModel> _groups = await DatabaseService(userUid: _user.uid).groupsSnapshot;
+      /*List<GroupDataModel> _groups = await DatabaseService(userUid: _user.uid).groupsSnapshot;
       _groups.map((group) => {
         result += "${group.name}, "
-      }).toList();
+      }).toList();*/
+      groupsDataKey.currentState.groupsOfCurrentUser.forEach((group) => {
+        result += group.name + ", ",
+      });
       return result;
     }
   
@@ -27,16 +33,17 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     
-    Future<void> _handleCommand(Map<String, dynamic> command) async {
+    /*Future<void>*/ void _handleCommand(Map<String, dynamic> command) /*async*/ {
       print("command: $command");
       // I think I might just restrucure the whole data structure to make it better for Alan (or maybe I wont)
       switch(command["command"]) {
         case "readGroups":
-          Future<String> _groups = _handleReadGroups(user);
-          _groups.then((data) => {
+          /*Future<String>*/ String _groups = _handleReadGroups(user);
+          /*_groups.then((data) => {
             AlanVoice.playText("groupdata $data")
             }
-          );
+          );*/
+          AlanVoice.playText("$_groups");
           break;
       }
     }
@@ -61,7 +68,7 @@ class _WrapperState extends State<Wrapper> {
       return Authenticate();
     } else {
       if (!_enabled) setState(() {_initAlanButton();});
-      return Home();
+      return Home(groupsDataKey: groupsDataKey,);
     }
   }
 }

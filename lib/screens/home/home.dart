@@ -11,23 +11,10 @@ import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
-final AuthService _auth = AuthService();
-  /*showOverlay(BuildContext context) {
-    OverlayState overlayState = Overlay.of(context);
-    OverlayEntry overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        bottom: 30,
-        right: 10,
-        child: CircleAvatar(
-          radius: 10,
-          backgroundColor: Colors.red,
-          child: Text("1"),
-        ),
-      ));
-    overlayState.insert(overlayEntry);
-  }*/
-
-
+  final Key groupsDataKey;
+  Home({this.groupsDataKey});
+  final AuthService _auth = AuthService();
+  
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -111,7 +98,7 @@ final AuthService _auth = AuthService();
           ],
           ),
       body: 
-        GroupsList(),
+        GroupsList(groupsDataKey: this.groupsDataKey,),
       )
     );
   }
