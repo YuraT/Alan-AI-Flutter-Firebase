@@ -1,16 +1,13 @@
 import "package:flutter/material.dart";
+import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/screens/authenticate/authenticate.dart';
-import 'package:project1/screens/home/group_data_screen.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
+import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:alan_voice/alan_voice.dart';
 
-// for new data just add keys here
-final keys = {
-  "groupsDataKey" : groupsDataKey,
-};
 
 final groupsDataKey = GlobalKey<GroupsListState>();
 class Wrapper extends StatefulWidget {
@@ -20,45 +17,51 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   bool _enabled = false;
   
-  String _handleReadGroups() {
-    String result = "";
-    groupsDataKey.currentState.groupsOfCurrentUser.forEach((group) => {
-      result += group.name + ", ",
-    });
-    return result;
+  /*Future<String>*/ String _handleReadGroups(User _user) /*async*/ {
+      String result = "";
+      /*List<GroupDataModel> _groups = await DatabaseService(userUid: _user.uid).groupsSnapshot;
+      _groups.map((group) => {
+        result += "${group.name}, "
+      }).toList();*/
+      groupsDataKey.currentState.groupsOfCurrentUser.forEach((group) => {
+        result += group.name + ", ",
+      });
+      return result;
     }
-  void _handleEnterGroup(String groupName) {
-    var groupData = groupsDataKey.currentState.groupsOfCurrentUser.singleWhere((group) => group.name.toLowerCase() == groupName.toLowerCase(), orElse: () => null);
-    if (groupData != null) {
-      // for now it generates widges one on top of the other regardless of cotext
-      // this causes the widgets to pile up and its not good, but I didnt have time to fix it
-      // will fix later
-      Navigator.push(
-        context, 
-        MaterialPageRoute(builder: (context) => GroupDataScreen(groupData: groupData)),
-      );
-    } else return null;
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     
     /*Future<void>*/ void _handleCommand(Map<String, dynamic> command) /*async*/ {
       print("command: $command");
+      // I think I might just restrucure the whole data structure to make it better for Alan (or maybe I wont)
       switch(command["command"]) {
         case "readGroups":
-          String _groups = _handleReadGroups();
+          /*Future<String>*/ String _groups = _handleReadGroups(user);
+          /*_groups.then((data) => {
+            AlanVoice.playText("groupdata $data")
+            }
+          );*/
           AlanVoice.playText("$_groups");
           break;
-        case "enterGroup":
-          _handleEnterGroup(command["groupName"]);
+        case "create group":
+
           break;
+        case "createTask":
+          // Create task handler
+
+          AlanVoice.playText("task added successfully.");
+          break;
+        case "signOut":
+          // signing out handler
+          break;
+
       }
     }
     void _initAlanButton() async {
       // init Alan with sample project id
-      AlanVoice.addButton("531dafb36d13902b724944e2c821de622e956eca572e1d8b807a3e2338fdd0dc/stage");
+      AlanVoice.addButton("db7b891a6e5f7daa61c56ee3d619bfeb2e956eca572e1d8b807a3e2338fdd0dc/stage");
       //AlanVoice.setVisualState({"screen": "groupScreen"}.toString());
       setState(() {
         _enabled = true;
@@ -77,8 +80,7 @@ class _WrapperState extends State<Wrapper> {
       return Authenticate();
     } else {
       if (!_enabled) setState(() {_initAlanButton();});
-      return Provider<Map<String, Key>>.value(value: keys, child: Home(),);
-      //return Home(groupsDataKey: groupsDataKey,);
+      return Home(groupsDataKey: groupsDataKey,);
     }
   }
 }
