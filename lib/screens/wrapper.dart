@@ -19,12 +19,8 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   bool _enabled = false;
   
-  /*Future<String>*/ String _handleReadGroups(User _user) /*async*/ {
+  String _handleReadGroups() {
       String result = "";
-      /*List<GroupDataModel> _groups = await DatabaseService(userUid: _user.uid).groupsSnapshot;
-      _groups.map((group) => {
-        result += "${group.name}, "
-      }).toList();*/
       groupsDataKey.currentState.groupsOfCurrentUser.forEach((group) => {
         result += group.name + ", ",
       });
@@ -37,14 +33,9 @@ class _WrapperState extends State<Wrapper> {
     
     /*Future<void>*/ void _handleCommand(Map<String, dynamic> command) /*async*/ {
       print("command: $command");
-      // I think I might just restrucure the whole data structure to make it better for Alan (or maybe I wont)
       switch(command["command"]) {
         case "readGroups":
-          /*Future<String>*/ String _groups = _handleReadGroups(user);
-          /*_groups.then((data) => {
-            AlanVoice.playText("groupdata $data")
-            }
-          );*/
+          String _groups = _handleReadGroups();
           AlanVoice.playText("$_groups");
           break;
       }
