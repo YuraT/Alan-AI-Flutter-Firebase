@@ -11,8 +11,6 @@ import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
-  final Key groupsDataKey;
-  Home({this.groupsDataKey});
   final AuthService _auth = AuthService();
   
   @override
@@ -98,7 +96,7 @@ class Home extends StatelessWidget {
           ],
           ),
       body: 
-        GroupsList(groupsDataKey: this.groupsDataKey,),
+        GroupsList(groupsDataKey: Provider.of<Map<String, Key>>(context)["groupsDataKey"],),
       )
     );
   }

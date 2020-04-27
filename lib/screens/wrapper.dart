@@ -1,13 +1,15 @@
 import "package:flutter/material.dart";
-import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/screens/authenticate/authenticate.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
-import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:alan_voice/alan_voice.dart';
 
+// for new data just add keys here
+final keys = {
+  "groupsDataKey" : groupsDataKey,
+};
 
 final groupsDataKey = GlobalKey<GroupsListState>();
 class Wrapper extends StatefulWidget {
@@ -68,7 +70,8 @@ class _WrapperState extends State<Wrapper> {
       return Authenticate();
     } else {
       if (!_enabled) setState(() {_initAlanButton();});
-      return Home(groupsDataKey: groupsDataKey,);
+      return Provider<Map<String, Key>>.value(value: keys, child: Home(),);
+      //return Home(groupsDataKey: groupsDataKey,);
     }
   }
 }
