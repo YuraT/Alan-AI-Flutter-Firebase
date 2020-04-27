@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:project1/models/user.dart';
 import 'package:project1/screens/authenticate/authenticate.dart';
+import 'package:project1/screens/home/group_data_screen.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
 import 'package:provider/provider.dart';
@@ -20,13 +21,25 @@ class _WrapperState extends State<Wrapper> {
   bool _enabled = false;
   
   String _handleReadGroups() {
-      String result = "";
-      groupsDataKey.currentState.groupsOfCurrentUser.forEach((group) => {
-        result += group.name + ", ",
-      });
-      return result;
+    String result = "";
+    groupsDataKey.currentState.groupsOfCurrentUser.forEach((group) => {
+      result += group.name + ", ",
+    });
+    return result;
     }
-  
+  void _handleEnterGroup(String groupName) {
+    var groupData = groupsDataKey.currentState.groupsOfCurrentUser.singleWhere((group) => group.name.toLowerCase() == groupName.toLowerCase(), orElse: () => null);
+    if (groupData != null) {
+      // for now it generates widges one on top of the other regardless of cotext
+      // this causes the widgets to pile up and its not good, but I didnt have time to fix it
+      // will fix later
+      Navigator.push(
+        context, 
+        MaterialPageRoute(builder: (context) => GroupDataScreen(groupData: groupData)),
+      );
+    } else return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -37,6 +50,9 @@ class _WrapperState extends State<Wrapper> {
         case "readGroups":
           String _groups = _handleReadGroups();
           AlanVoice.playText("$_groups");
+          break;
+        case "enterGroup":
+          _handleEnterGroup(command["groupName"]);
           break;
       }
     }
