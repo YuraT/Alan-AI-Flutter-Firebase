@@ -43,12 +43,12 @@ class _RegisterState extends State<Register> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal:50.0),
+          padding: EdgeInsets.symmetric(vertical: 60.0, horizontal:50.0),
           child: Form(
             key: _formKey,
             child: Column(
               children: <Widget>[
-                //SizedBox(height: 20.0),
+                SizedBox(height: 10.0),
                 // first name text box
                 TextFormField(
                   decoration: textInputDecoration.copyWith(hintText: "First Name"),
@@ -57,7 +57,7 @@ class _RegisterState extends State<Register> {
                     setState(() => firstName = val);
                   }
                 ),
-                //SizedBox(height: 20.0),
+                SizedBox(height: 10.0),
                 // last name text box
                 TextFormField(
                   decoration: textInputDecoration.copyWith(hintText: "Last Name"),
@@ -66,7 +66,7 @@ class _RegisterState extends State<Register> {
                     setState(() => lastName = val);
                   }
                 ),
-                //SizedBox(height: 20.0),
+                SizedBox(height: 10.0),
                 // email text box
                 TextFormField(
                   decoration: textInputDecoration.copyWith(hintText: "Email"),
@@ -75,7 +75,7 @@ class _RegisterState extends State<Register> {
                     setState(() => email = val);
                   }
                 ),
-                //SizedBox(height: 20.0),
+                SizedBox(height: 10.0),
                 // username text box
                 TextFormField(
                   decoration: textInputDecoration.copyWith(hintText: "Username"),
@@ -84,7 +84,7 @@ class _RegisterState extends State<Register> {
                     setState(() => username = val);
                   }
                 ),
-                //SizedBox(height: 20.0),
+                SizedBox(height: 10.0),
                 // password text box
                 TextFormField(
                   decoration: textInputDecoration.copyWith(hintText: "Password"),
@@ -94,7 +94,7 @@ class _RegisterState extends State<Register> {
                     setState(() => password = val);
                   }
                 ),
-                //SizedBox(height: 20.0),
+                SizedBox(height: 10.0),
                 // confirm password text box
                 TextFormField(
                   decoration: textInputDecoration.copyWith(hintText: "Confirm Password"),
@@ -104,7 +104,7 @@ class _RegisterState extends State<Register> {
                     setState(() => confirmPassword = val);
                   }
                 ),
-                //SizedBox(height: 20.0),
+                SizedBox(height: 10.0),
                 // register button
                 RaisedButton(
                   color: Colors.pink[400],
