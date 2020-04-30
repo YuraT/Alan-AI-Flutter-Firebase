@@ -5,6 +5,98 @@ import 'package:project1/services/database.dart';
 import 'package:project1/shared/constants.dart';
 import 'package:provider/provider.dart';
 
+
+
+// START StackOverflow Code
+
+class MultiSelectDialogItem<V> {
+  const MultiSelectDialogItem(this.value, this.label);
+
+  final V value;
+  final String label;
+}
+
+class MultiSelectDialog<V> extends StatefulWidget {
+  MultiSelectDialog({Key key, this.items, this.initialSelectedValues}) : super(key: key);
+
+  final List<MultiSelectDialogItem<V>> items;
+  final Set<V> initialSelectedValues;
+
+  @override
+  State<StatefulWidget> createState() => _MultiSelectDialogState<V>();
+}
+
+class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
+  final _selectedValues = Set<V>();
+
+  void initState() {
+    super.initState();
+    if (widget.initialSelectedValues != null) {
+      _selectedValues.addAll(widget.initialSelectedValues);
+    }
+  }
+
+  void _onItemCheckedChange(V itemValue, bool checked) {
+    setState(() {
+      if (checked) {
+        _selectedValues.add(itemValue);
+      } else {
+        _selectedValues.remove(itemValue);
+      }
+    });
+  }
+
+  void _onCancelTap() {
+    Navigator.pop(context);
+  }
+
+  void _onSubmitTap() {
+    Navigator.pop(context, _selectedValues);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Select Employees'),
+      contentPadding: EdgeInsets.only(top: 12.0),
+      content: SingleChildScrollView(
+        child: ListTileTheme(
+          contentPadding: EdgeInsets.fromLTRB(14.0, 0.0, 24.0, 0.0),
+          child: ListBody(
+            children: widget.items.map(_buildItem).toList(),
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('CANCEL'),
+          onPressed: _onCancelTap,
+        ),
+        FlatButton(
+          child: Text('OK'),
+          onPressed: _onSubmitTap,
+        )
+      ],
+    );
+  }
+
+  Widget _buildItem(MultiSelectDialogItem<V> item) {
+    final checked = _selectedValues.contains(item.value);
+    return CheckboxListTile(
+      value: checked,
+      title: Text(item.label),
+      controlAffinity: ListTileControlAffinity.leading,
+      onChanged: (checked) => _onItemCheckedChange(item.value, checked),
+    );
+  }
+}
+
+//END StackOverflow Code
+
+
+
+
+
 class TaskAddForm extends StatefulWidget {
   final GroupDataModel groupData;
   @override
@@ -23,6 +115,58 @@ class _TaskAddFormState extends State<TaskAddForm> {
   String _currentDescription;
   List<String> _currentUsers;
   DateTime _currentDeadline;
+
+
+  //MULTI SELECT FUNCTION
+
+  List <MultiSelectDialogItem<int>>  multiItem = List();
+
+  final valuestopopulate = {
+    1 : "User_1",
+    2 : "User_2",
+    3 : "User_3",
+    4 : "User_4",
+  };
+
+  void populateMultiSelect(){
+    for(int v in valuestopopulate.keys){
+      multiItem.add(MultiSelectDialogItem(v, valuestopopulate[v]));
+    }
+  }
+
+
+
+  void _showMultiSelect(BuildContext context) async {
+    multiItem = [];
+    populateMultiSelect();
+    final items = multiItem;
+
+    final selectedValues = await showDialog<Set<int>>(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelectDialog(
+          items: items,
+          //initialSelectedValues: [1, 3].toSet(),
+        );
+      },
+    );
+
+    print(selectedValues);
+    getvaluefromkey(selectedValues);
+  }
+
+  void getvaluefromkey(Set selection){
+    if (selection != null){
+      for(int x in selection.toList()){
+        print(valuestopopulate[x]);
+      }
+    }
+  }
+
+  //MULTI SELECT FUNCTION
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +202,22 @@ class _TaskAddFormState extends State<TaskAddForm> {
               ),
               // (Ben) replace that TextFormField below with a dropdown list of strings
               // Theres also dropdown menu code that is commented out further below. Its from the tutorials, perhaps you can look at it for reference
-              TextFormField(
+
+              RaisedButton(
+                child: Text("Select Employees"),
+                onPressed: () => _showMultiSelect(context),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+
+            /*  TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Employees"),
                 validator: (val) => val.isEmpty ? "Please enter employees" : null,
                 // change [val] to proper list later, need to make this some sort of dropdown but also be able to select multiple users
                 onChanged: (val) => setState(() => _currentUsers = val.split(" ")),
               ),
-
+*/
               // (Ava) (Parul) add a date picker below (ignore all the commented code, its old stuff from the tutorials)
               Text(_currentDeadline == null ? 'No date has been picked yet' : _currentDeadline.toString()),
               RaisedButton(
@@ -82,6 +235,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
                     });
                   });
                   },
+              ),
+              SizedBox(
+                height: 10.0,
               ),
               // dropdown menu
               // not in use anymore
