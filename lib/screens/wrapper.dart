@@ -1,15 +1,24 @@
 import "package:flutter/material.dart";
-import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/screens/authenticate/authenticate.dart';
+import 'package:project1/screens/home/group_data_screen.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
-import 'package:project1/services/database.dart';
+import 'package:project1/screens/home/tasks_data_list.dart';
 import 'package:provider/provider.dart';
 import 'package:alan_voice/alan_voice.dart';
 
+// for new data just add keys here
+final Map<String, Key> keys = {
+  "groupsDataKey" : groupsDataKey,
+  "groupDataScreenKey" : groupDataScreenKey,
+  "tasksDataKey": tasksDataKey
+};
 
 final groupsDataKey = GlobalKey<GroupsListState>();
+final groupDataScreenKey = GlobalKey<GroupDataScreenState>();
+final tasksDataKey = GlobalKey<TasksDataListState>();
+
 class Wrapper extends StatefulWidget {
   @override
   _WrapperState createState() => _WrapperState();
@@ -17,36 +26,78 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   bool _enabled = false;
   
-  /*Future<String>*/ String _handleReadGroups(User _user) /*async*/ {
+  String _handleReadGroups() {
+    String result = "";
+    groupsDataKey.currentState.groupsOfCurrentUser.forEach((group) => {
+      result += group.name + ", ",
+    });
+    return result;
+    }
+
+  String _handleReadTasks(String groupName) {
+    if (groupName != null) {
+      _handleEnterGroup(groupName);
+    }
+    if (tasksDataKey.currentState == null) { 
+      return null;
+      }
+    else {
       String result = "";
-      /*List<GroupDataModel> _groups = await DatabaseService(userUid: _user.uid).groupsSnapshot;
-      _groups.map((group) => {
-        result += "${group.name}, "
-      }).toList();*/
-      groupsDataKey.currentState.groupsOfCurrentUser.forEach((group) => {
-        result += group.name + ", ",
+      tasksDataKey.currentState.currentTasksData.forEach((task) => {
+        result += task.title + ", ",
       });
       return result;
     }
+  }
+  
+  void _handleEnterGroup(String groupName) {
+    var groupData = groupsDataKey.currentState.groupsOfCurrentUser.singleWhere((group) => group.name.toLowerCase() == groupName.toLowerCase(), orElse: () => null);
+    if (groupData != null) {
+      // for now it generates widges one on top of the other regardless of cotext
+      // this causes the widgets to pile up and its not good, but I didnt have time to fix it
+      // will fix later
+
+      // some context testing
+      // print("context.widget.toStringShort:");
+      // print("context.widget.toStringShort: ${context.widget.toStringShort()}");
+      if (groupDataScreenKey.currentState == null){
+        Navigator.push(
+          context, 
+          MaterialPageRoute(builder: (context) {
+            return GroupDataScreen(groupDataScreenKey: groupDataScreenKey, groupData: groupData, tasksDataKey: tasksDataKey,);
+          }),
+        );
+      } else {
+        if (groupDataScreenKey.currentState.currentGroupData != groupData) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return GroupDataScreen(groupDataScreenKey: groupDataScreenKey, groupData: groupData, tasksDataKey: tasksDataKey);
+            })
+          );
+        }
+      }
+    } else return null;
+  }
   
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    
     /*Future<void>*/ void _handleCommand(Map<String, dynamic> command) /*async*/ {
       print("command: $command");
       // I think I might just restrucure the whole data structure to make it better for Alan (or maybe I wont)
       switch(command["command"]) {
         case "readGroups":
-          /*Future<String>*/ String _groups = _handleReadGroups(user);
-          /*_groups.then((data) => {
-            AlanVoice.playText("groupdata $data")
-            }
-          );*/
+          String _groups = _handleReadGroups();
           AlanVoice.playText("$_groups");
           break;
-        case "create group":
-
+        case "enterGroup":
+          _handleEnterGroup(command["groupName"]);
+          break;
+        case "readTasks":
+          String _tasks = _handleReadTasks(command["groupName"]?? null);
+          if (_tasks == null) AlanVoice.playText("could not read tasks");
+          else AlanVoice.playText("$_tasks");
           break;
         case "createTask":
           // Create task handler
@@ -56,7 +107,6 @@ class _WrapperState extends State<Wrapper> {
         case "signOut":
           // signing out handler
           break;
-
       }
     }
     void _initAlanButton() async {
@@ -80,7 +130,8 @@ class _WrapperState extends State<Wrapper> {
       return Authenticate();
     } else {
       if (!_enabled) setState(() {_initAlanButton();});
-      return Home(groupsDataKey: groupsDataKey,);
+      return Provider<Map<String, Key>>.value(value: keys, child: Home(),);
+      //return Home(groupsDataKey: groupsDataKey,);
     }
   }
 }
