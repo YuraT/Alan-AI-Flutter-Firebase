@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/screens/home/group_data_screen.dart';
+import 'package:provider/provider.dart';
 
 class GroupDataTile extends StatelessWidget {
   final GroupDataModel groupData;
   GroupDataTile({this.groupData});
   
   @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
@@ -21,9 +22,12 @@ class GroupDataTile extends StatelessWidget {
             RaisedButton(
             child: Text("route"), 
             onPressed: () {
+              Key groupDataScreenKey = Provider.of<Map<String,Key>>(context)["groupDataScreenKey"];
+              Key tasksDataKey = Provider.of<Map<String,Key>>(context)["tasksDataKey"];
+
               Navigator.push(
                 context, 
-                MaterialPageRoute(builder: (context) => GroupDataScreen(groupData: groupData)),
+                MaterialPageRoute(builder: (context) => GroupDataScreen(groupDataScreenKey: groupDataScreenKey,groupData: groupData, tasksDataKey: tasksDataKey,)),
               );
             },
             )

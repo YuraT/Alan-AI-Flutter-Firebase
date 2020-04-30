@@ -4,15 +4,21 @@ import 'package:project1/screens/authenticate/authenticate.dart';
 import 'package:project1/screens/home/group_data_screen.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
+import 'package:project1/screens/home/tasks_data_list.dart';
 import 'package:provider/provider.dart';
 import 'package:alan_voice/alan_voice.dart';
 
 // for new data just add keys here
-final keys = {
+final Map<String, Key> keys = {
   "groupsDataKey" : groupsDataKey,
+  "groupDataScreenKey" : groupDataScreenKey,
+  "tasksDataKey": tasksDataKey
 };
 
 final groupsDataKey = GlobalKey<GroupsListState>();
+final groupDataScreenKey = GlobalKey<GroupDataScreenState>();
+final tasksDataKey = GlobalKey<TasksDataListState>();
+
 class Wrapper extends StatefulWidget {
   @override
   _WrapperState createState() => _WrapperState();
@@ -27,23 +33,56 @@ class _WrapperState extends State<Wrapper> {
     });
     return result;
     }
+
+  String _handleReadTasks(String groupName) {
+    if (groupName != null) {
+      _handleEnterGroup(groupName);
+    }
+    if (tasksDataKey.currentState == null) { 
+      return null;
+      }
+    else {
+      String result = "";
+      tasksDataKey.currentState.currentTasksData.forEach((task) => {
+        result += task.title + ", ",
+      });
+      return result;
+    }
+  }
+  
   void _handleEnterGroup(String groupName) {
     var groupData = groupsDataKey.currentState.groupsOfCurrentUser.singleWhere((group) => group.name.toLowerCase() == groupName.toLowerCase(), orElse: () => null);
     if (groupData != null) {
       // for now it generates widges one on top of the other regardless of cotext
       // this causes the widgets to pile up and its not good, but I didnt have time to fix it
       // will fix later
-      Navigator.push(
-        context, 
-        MaterialPageRoute(builder: (context) => GroupDataScreen(groupData: groupData)),
-      );
+
+      // some context testing
+      // print("context.widget.toStringShort:");
+      // print("context.widget.toStringShort: ${context.widget.toStringShort()}");
+      if (groupDataScreenKey.currentState == null){
+        Navigator.push(
+          context, 
+          MaterialPageRoute(builder: (context) {
+            return GroupDataScreen(groupDataScreenKey: groupDataScreenKey, groupData: groupData, tasksDataKey: tasksDataKey,);
+          }),
+        );
+      } else {
+        if (groupDataScreenKey.currentState.currentGroupData != groupData) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return GroupDataScreen(groupDataScreenKey: groupDataScreenKey, groupData: groupData, tasksDataKey: tasksDataKey);
+            })
+          );
+        }
+      }
     } else return null;
   }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    
     /*Future<void>*/ void _handleCommand(Map<String, dynamic> command) /*async*/ {
       print("command: $command");
       switch(command["command"]) {
@@ -53,6 +92,11 @@ class _WrapperState extends State<Wrapper> {
           break;
         case "enterGroup":
           _handleEnterGroup(command["groupName"]);
+          break;
+        case "readTasks":
+          String _tasks = _handleReadTasks(command["groupName"]?? null);
+          if (_tasks == null) AlanVoice.playText("could not read tasks");
+          else AlanVoice.playText("$_tasks");
           break;
       }
     }

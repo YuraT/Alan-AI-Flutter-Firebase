@@ -4,19 +4,20 @@ import 'package:project1/screens/home/task_data_tile.dart';
 import 'package:provider/provider.dart';
 
 class TasksDataList extends StatefulWidget {
+  TasksDataList({Key tasksDataKey}) : super(key: tasksDataKey);
   @override
-  _TasksDataListState createState() => _TasksDataListState();
+  TasksDataListState createState() => TasksDataListState();
 }
 
-class _TasksDataListState extends State<TasksDataList> {
+class TasksDataListState extends State<TasksDataList> {
+  List<TaskDataModel> currentTasksData;
+
   @override
   Widget build(BuildContext context) {
     final tasksData = Provider.of<List<TaskDataModel>>(context) ?? [];
-    /*tasksData.forEach((taskData) {
-      print(taskData.title);
-      print(taskData.description);
-      print(taskData.users);
-    });*/
+    setState(() {
+      currentTasksData = tasksData;
+    });
 
     return Column(
       children: <Widget>[
