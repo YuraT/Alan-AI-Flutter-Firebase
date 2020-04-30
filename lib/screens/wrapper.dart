@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
+import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/screens/authenticate/authenticate.dart';
-import 'package:project1/screens/home/group_data_screen.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
 import 'package:project1/screens/home/tasks_data_list.dart';
@@ -79,12 +79,13 @@ class _WrapperState extends State<Wrapper> {
       }
     } else return null;
   }
-
+  
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     /*Future<void>*/ void _handleCommand(Map<String, dynamic> command) /*async*/ {
       print("command: $command");
+      // I think I might just restrucure the whole data structure to make it better for Alan (or maybe I wont)
       switch(command["command"]) {
         case "readGroups":
           String _groups = _handleReadGroups();
@@ -98,11 +99,19 @@ class _WrapperState extends State<Wrapper> {
           if (_tasks == null) AlanVoice.playText("could not read tasks");
           else AlanVoice.playText("$_tasks");
           break;
+        case "createTask":
+          // Create task handler
+
+          AlanVoice.playText("task added successfully.");
+          break;
+        case "signOut":
+          // signing out handler
+          break;
       }
     }
     void _initAlanButton() async {
       // init Alan with sample project id
-      AlanVoice.addButton("531dafb36d13902b724944e2c821de622e956eca572e1d8b807a3e2338fdd0dc/stage");
+      AlanVoice.addButton("db7b891a6e5f7daa61c56ee3d619bfeb2e956eca572e1d8b807a3e2338fdd0dc/stage");
       //AlanVoice.setVisualState({"screen": "groupScreen"}.toString());
       setState(() {
         _enabled = true;

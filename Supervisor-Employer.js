@@ -1,6 +1,8 @@
 // Supervisor/ Employer
 intent("What (does| can|) (this|alan|) do?", 
        reply("You can assign tasks or create groups with just your voice."));
+intent("(Hello|Hi|hey|)", 
+      reply("Hello"));
 
 intent("(Join|add|I would like to join|) a group", p => {
     p.play("what is your code?");
@@ -8,11 +10,14 @@ intent("(Join|add|I would like to join|) a group", p => {
 });
 
 // six digit letter + number codes
-var groupCodes = "xcx123|123123|345ffg|1 2 3 1 2 3"; // will likely ignore in the future
+var groupCodes = "xcx123|123123|345 f f g~marketing|1 2 3 1 2 3~Developer Team| test"; // will likely ignore in the future
 
 var addGroupCode = context(() => {
     intent(`$(T ${groupCodes})`, p => {
-        p.play(`joined group ${p.T.value}`);
+        if(p.T.value === "test"){
+             p.play(`test complete`);
+        }
+        p.play(`joined (group|the|) ${p.T.label}`);
         //@ add flutter stuff
     });
 });
@@ -36,7 +41,9 @@ var taskProcess = context(() => {
         //@add flutrer stuff
     });
 });
-
+intent(`create task testing`, p => {
+    p.play( {command: 'createTask'});
+});
 // More convenient
 // other task route 
 intent("(add|create|append|) (a|a new|) task", p => {
@@ -63,4 +70,10 @@ intent(`(Mark|delete task| edit state of |completed task|completed) $(TASK* (.*)
 intent("(read|what are my| state| list|what do i have to do|) task_", p => {
     // @ communicate with flutter data to list
     p.play(`Your tasks are: `);
+});
+
+//read groups
+intent("(what are|read|read my| read the|tell me| show| list|list all|) groups", p => {
+    p.play(`Here are your groups:`);
+    p.play( {command: 'readGroups'});
 });
