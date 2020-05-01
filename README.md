@@ -5,6 +5,18 @@ From the Flutter-Firebase tutorials, with some modifications for the Alan app
 
 The auth works only with email
 
+Sample credentials:
+"email1@gmail.com"
+"password"
+without quotes
+
+Currently working Alan voice commands:
+- read groups
+- enter group
+- read tasks (only works after entering group)
+
+The voice commands currently dont take any parameters and are preloaded with static data
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
