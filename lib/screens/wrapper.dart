@@ -35,12 +35,12 @@ class _WrapperState extends State<Wrapper> {
     }
 
   String _handleReadTasks(String groupName) {
-    if (groupName != null) {
+    if ((groupName != null) && (groupName.toLowerCase() != (groupDataScreenKey.currentState != null ? groupDataScreenKey.currentState.currentGroupData.name.toLowerCase() : null))) {
       _handleEnterGroup(groupName);
     }
     if (tasksDataKey.currentState == null) { 
       return null;
-      }
+    }
     else {
       String result = "";
       tasksDataKey.currentState.currentTasksData.forEach((task) => {
@@ -51,6 +51,7 @@ class _WrapperState extends State<Wrapper> {
   }
   
   void _handleEnterGroup(String groupName) {
+    print("enteringGroup");
     var groupData = groupsDataKey.currentState.groupsOfCurrentUser.singleWhere((group) => group.name.toLowerCase() == groupName.toLowerCase(), orElse: () => null);
     if (groupData != null) {
       // for now it generates widges one on top of the other regardless of cotext
