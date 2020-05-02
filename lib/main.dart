@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamProvider<User>.value(
       value: AuthService().user,
-      child: Wrap(),
+      child: DataStream(),
     );
     /*return StreamProvider<User>.value(
       value: AuthService().user,
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Wrap extends StatelessWidget {
+class DataStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
