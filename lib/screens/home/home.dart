@@ -62,14 +62,15 @@ class Home extends StatelessWidget {
       )
     );*/
 
-    return MultiProvider(
+    // provider moved above to main.dart
+    /*return MultiProvider(
       providers: [
         StreamProvider<List<UserDataModel>>.value(
           value: DatabaseService().users),
         StreamProvider<List<GroupDataModel>>.value(
           value: DatabaseService(userUid: user.uid).groups),
       ],
-      child: Scaffold(
+      child:*/ return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         title: Text("App 1"),
@@ -97,7 +98,7 @@ class Home extends StatelessWidget {
           ),
       body: 
         GroupsList(groupsDataKey: Provider.of<Map<String, Key>>(context)["groupsDataKey"],),
-      )
-    );
+      );
+    /*);*/
   }
 }
