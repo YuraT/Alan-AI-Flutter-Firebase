@@ -9,10 +9,12 @@ import 'package:provider/provider.dart';
 import 'package:alan_voice/alan_voice.dart';
 
 // for new data just add keys here
+// might not need this with the new structure
 final Map<String, Key> keys = {
   "groupsDataKey" : groupsDataKey,
   "groupDataScreenKey" : groupDataScreenKey,
   "tasksDataKey": tasksDataKey
+
 };
 
 final groupsDataKey = GlobalKey<GroupsListState>();
@@ -35,12 +37,12 @@ class _WrapperState extends State<Wrapper> {
     }
 
   String _handleReadTasks(String groupName) {
-    if ((groupName != null) && (groupName.toLowerCase() != (groupDataScreenKey.currentState != null ? groupDataScreenKey.currentState.currentGroupData.name.toLowerCase() : null))) {
+    if (groupName != null) {
       _handleEnterGroup(groupName);
     }
     if (tasksDataKey.currentState == null) { 
       return null;
-    }
+      }
     else {
       String result = "";
       tasksDataKey.currentState.currentTasksData.forEach((task) => {
@@ -51,7 +53,6 @@ class _WrapperState extends State<Wrapper> {
   }
   
   void _handleEnterGroup(String groupName) {
-    print("enteringGroup");
     var groupData = groupsDataKey.currentState.groupsOfCurrentUser.singleWhere((group) => group.name.toLowerCase() == groupName.toLowerCase(), orElse: () => null);
     if (groupData != null) {
       // for now it generates widges one on top of the other regardless of cotext
@@ -86,7 +87,6 @@ class _WrapperState extends State<Wrapper> {
     final user = Provider.of<User>(context);
     /*Future<void>*/ void _handleCommand(Map<String, dynamic> command) /*async*/ {
       print("command: $command");
-      // I think I might just restrucure the whole data structure to make it better for Alan (or maybe I wont)
       switch(command["command"]) {
         case "readGroups":
           String _groups = _handleReadGroups();
