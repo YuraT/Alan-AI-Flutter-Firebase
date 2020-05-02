@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
+import 'package:project1/models/user_data_model.dart';
 import 'package:project1/services/database.dart';
 import 'package:project1/shared/constants.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,9 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
   }
 
   void _onSubmitTap() {
-    Navigator.pop(context, _selectedValues);
+    if (_selectedValues != null) {
+      Navigator.pop(context, _selectedValues);
+    }
   }
 
   @override
@@ -101,12 +104,10 @@ class TaskAddForm extends StatefulWidget {
   final GroupDataModel groupData;
   @override
   TaskAddForm(this.groupData);
-  _TaskAddFormState createState() => _TaskAddFormState(groupData);
+  _TaskAddFormState createState() => _TaskAddFormState();
 }
 
 class _TaskAddFormState extends State<TaskAddForm> {
-  final GroupDataModel groupData;
-  _TaskAddFormState(this.groupData);
   final _formkey = GlobalKey<FormState>();
   //final List<String> sugars = ['0','1','2','3','4'];
 
@@ -119,18 +120,13 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   //MULTI SELECT FUNCTION
 
-  List <MultiSelectDialogItem<int>>  multiItem = List();
+  List <MultiSelectDialogItem<String>>  multiItem = List();
 
-  final valuestopopulate = {
-    1 : "User_1",
-    2 : "User_2",
-    3 : "User_3",
-    4 : "User_4",
-  };
 
-  void populateMultiSelect(){
-    for(int v in valuestopopulate.keys){
-      multiItem.add(MultiSelectDialogItem(v, valuestopopulate[v]));
+
+  void populateMultiSelect(Map<String, String> valuesToPopulate){
+    for(String v in valuesToPopulate.keys){
+      multiItem.add(MultiSelectDialogItem(v, valuesToPopulate[v]));
     }
   }
 
@@ -138,30 +134,38 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   void _showMultiSelect(BuildContext context) async {
     multiItem = [];
-    populateMultiSelect();
+    Map<String, String> valuesToPopulate =  {};
+    Provider.of<List<UserDataModel>>(context).where((user) => widget.groupData.users.contains(user.uid)).forEach((user) { // have to add a method later to only let admins assign to all users
+      valuesToPopulate.putIfAbsent(user.uid, () => user.firstName + " " + user.lastName);
+    });
+    populateMultiSelect(valuesToPopulate);
     final items = multiItem;
 
-    final selectedValues = await showDialog<Set<int>>(
+    final selectedValues = await showDialog<Set<String>>(
       context: context,
       builder: (BuildContext context) {
         return MultiSelectDialog(
           items: items,
-          //initialSelectedValues: [1, 3].toSet(),
+          initialSelectedValues: _currentUsers.toSet(), // initially select users from state
         );
       },
     );
-
-    print(selectedValues);
-    getvaluefromkey(selectedValues);
+    if (selectedValues != null && selectedValues.length != 0) {
+      setState(() {
+        _currentUsers = selectedValues.toList();
+      });
+    }
+    print("selectedValues: $selectedValues");
+    //getvaluefromkey(selectedValues);
   }
 
-  void getvaluefromkey(Set selection){
+  /*void getvaluefromkey(Set selection){
     if (selection != null){
-      for(int x in selection.toList()){
-        print(valuestopopulate[x]);
+      for(String x in selection.toList()){
+        print(valuesToPopulate[x]);
       }
     }
-  }
+  }*/
 
   //MULTI SELECT FUNCTION
 
@@ -275,7 +279,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                     await DatabaseService(userUid: user.uid).createTask(
                       _currentTitle,
                       _currentDescription,
-                      groupData.uid,
+                      widget.groupData.uid,
                       user.uid,
                       _currentUsers,
                       _currentDeadline,
