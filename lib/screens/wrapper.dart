@@ -36,33 +36,24 @@ class _WrapperState extends State<Wrapper> {
     return result;
     }
 
-  /*Future<String>*/ void _handleReadTasks(String groupName) async {
-    void _doStuff() {
-      print("readStep2");
-      if (tasksDataKey.currentState == null) {
-        print("readStep3");
-        return null;
-      }
-      else {
-        String result = "";
-        tasksDataKey.currentState.currentTasksData.forEach((task) => {
-          result += task.title + ", ",
-        });
-        //return result;
-        if (result == null) AlanVoice.playText("could not read tasks");
-        else AlanVoice.playText("$result");
-      }
+  String _handleReadTasks(String groupName) {
+    if (groupName != null) {
+      _handleEnterGroup(groupName);
     }
-    if ((groupName != null) && (groupName.toLowerCase() != (groupDataScreenKey.currentState != null ? groupDataScreenKey.currentState.currentGroupData.name.toLowerCase() : null))) {
-      _handleEnterGroup(groupName).then((val) => _doStuff());
-      print("readStep1");
-    } else _doStuff();
+    if (tasksDataKey.currentState == null) { 
+      return null;
+      }
+    else {
+      String result = "";
+      tasksDataKey.currentState.currentTasksData.forEach((task) => {
+        result += task.title + ", ",
+      });
+      return result;
+    }
   }
   
-  Future<void> _handleEnterGroup(String groupName) async {
-    print("enteringGroup");
+  void _handleEnterGroup(String groupName) {
     var groupData = groupsDataKey.currentState.groupsOfCurrentUser.singleWhere((group) => group.name.toLowerCase() == groupName.toLowerCase(), orElse: () => null);
-    print("step1");
     if (groupData != null) {
       // for now it generates widges one on top of the other regardless of cotext
       // this causes the widgets to pile up and its not good, but I didnt have time to fix it
@@ -72,24 +63,20 @@ class _WrapperState extends State<Wrapper> {
       // print("context.widget.toStringShort:");
       // print("context.widget.toStringShort: ${context.widget.toStringShort()}");
       if (groupDataScreenKey.currentState == null){
-        print("step2");
         Navigator.push(
           context, 
           MaterialPageRoute(builder: (context) {
-            print("step3");
             return GroupDataScreen(groupDataScreenKey: groupDataScreenKey, groupData: groupData, tasksDataKey: tasksDataKey,);
           }),
-        ).then((val) {print("ohItHappened0");});
+        );
       } else {
-        print("step2");
         if (groupDataScreenKey.currentState.currentGroupData != groupData) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) {
-              print("step3");
               return GroupDataScreen(groupDataScreenKey: groupDataScreenKey, groupData: groupData, tasksDataKey: tasksDataKey);
             })
-          ).then((val) {print("ohItHappened0");}); 
+          );
         }
       }
     } else return null;
@@ -98,9 +85,8 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    /*Future<void>*/ void _handleCommand(Map<String, dynamic> command) async {
+    /*Future<void>*/ void _handleCommand(Map<String, dynamic> command) /*async*/ {
       print("command: $command");
-      // I think I might just restrucure the whole data structure to make it better for Alan (or maybe I wont)
       switch(command["command"]) {
         case "readGroups":
           String _groups = _handleReadGroups();
@@ -110,10 +96,9 @@ class _WrapperState extends State<Wrapper> {
           _handleEnterGroup(command["groupName"]);
           break;
         case "readTasks":
-          _handleReadTasks(command["groupName"]?? null);
-          /*String _tasks = await _handleReadTasks(command["groupName"]?? null);
+          String _tasks = _handleReadTasks(command["groupName"]?? null);
           if (_tasks == null) AlanVoice.playText("could not read tasks");
-          else AlanVoice.playText("$_tasks");*/
+          else AlanVoice.playText("$_tasks");
           break;
         case "createTask":
           // Create task handler
