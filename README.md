@@ -1,19 +1,30 @@
-# project1
-From the Flutter-Firebase tutorials, with some modifications for the Alan app
+# TaskV
+Voice-powered organizational mobile application:
+- Organize tasks
+- Create Groups to share tasks with deadlines and reminders
+- Quick-updating interface with native code.
+- Can also be used without microphone via text forms.
+- Increase team efficiency by assigning tasks to specific users within groups.
 
-## Important Things That Need to be Noted
-
-The auth works only with email
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Project is not yet deployed, but is going to be available on IOS, Android, and Web. (Flutter Native)
 
-A few resources to get you started if this is your first Flutter project:
+### Prerequisites
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```
+Microphone Access
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Deployment
+
+Add additional notes about how to deploy this on a live system
+
+## Built With
+
+* [Flutter](https://flutter.dev/) - App Native Code framework
+* [Alan](https://alan.app/) - Alan AI voice platform
+
+
