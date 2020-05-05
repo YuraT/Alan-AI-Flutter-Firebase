@@ -9,7 +9,10 @@ Voice-powered organizational mobile application:
 
 ## Getting Started
 
-Project is not yet deployed, but is going to be available on IOS, Android, and Web. (Flutter Native)
+- Create User (Email-Password Authorization)
+- Create New team or Join team/organization
+- Assign tasks and/or receive tasks
+- Manage tasks and deadlines
 
 ### Prerequisites
 
@@ -19,8 +22,8 @@ Microphone Access
 
 
 ## Deployment
+In the future, the app will be available on IOS, Android, and Web platforms
 
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
