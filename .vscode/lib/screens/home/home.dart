@@ -70,11 +70,12 @@ final AuthService _auth = AuthService();
           value: DatabaseService(userUid: user.uid).groups),
       ],
       child: Scaffold(
-      backgroundColor: Colors.brown[50],
+            resizeToAvoidBottomPadding: false,
+      backgroundColor: Color.fromARGB(255, 229, 235, 239),
       appBar: AppBar(
-        title: Text("App 1"),
-        backgroundColor: Colors.brown[400],
-        elevation: 0.0,
+        backgroundColor: Colors.white,
+        elevation: 10.0,
+        title: Image.asset('assets/images/logo_only.png'),
         actions: <Widget>[
           FlatButton.icon(
             onPressed: () async {

@@ -28,11 +28,22 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Colors.brown[100],
+       resizeToAvoidBottomPadding: false,
+        backgroundColor: Color.fromARGB(255, 229, 235, 239),
       appBar: AppBar(
-        backgroundColor: Colors.brown[400],
-        elevation: 0.0,
-        title: Text("Sign up to App"),
+        backgroundColor: Colors.white,
+        elevation: 10.0,
+       title: Image.asset('assets/images/fulllogo.png', fit: BoxFit.contain, height: 40.0,),
+        /*Text(
+          "TaskEase",
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            color: Color.fromARGB(255, 58, 83, 115),
+            fontSize: 30,
+            letterSpacing: 2
+          ),
+          ),
+          */
         actions: <Widget>[
           FlatButton.icon(onPressed: () {
             widget.toggleView();
@@ -42,8 +53,8 @@ class _RegisterState extends State<Register> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 60.0, horizontal:50.0),
+              child: Container(
+          padding: EdgeInsets.symmetric(vertical: 40.0, horizontal:50.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -104,10 +115,10 @@ class _RegisterState extends State<Register> {
                     setState(() => confirmPassword = val);
                   }
                 ),
-                SizedBox(height: 10.0),
+                SizedBox(height: 20.0),
                 // register button
                 RaisedButton(
-                  color: Colors.pink[400],
+                  color:  Color.fromARGB(255, 58, 83, 115),
                   child: Text("Register", style: TextStyle(color: Colors.white)),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {

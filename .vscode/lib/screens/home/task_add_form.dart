@@ -109,7 +109,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 ),*/
 
               RaisedButton(
-                color: Colors.pink[400],
+                color: Color.fromARGB(255, 58, 83, 115),
                 child: Text(
                   "Submit",
                   style: TextStyle(color: Colors.white),

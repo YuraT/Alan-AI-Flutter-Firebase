@@ -25,11 +25,22 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return loading? Loading() : Scaffold(
       resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.brown[100],
+      backgroundColor: Color.fromARGB(255, 229, 235, 239),
       appBar: AppBar(
-        backgroundColor: Colors.brown[400],
-        elevation: 0.0,
-        title: Text("Sign in to App"),
+        backgroundColor: Colors.white,
+        elevation: 10.0,
+        //title: Image.asset('assets/images/TaskEaseSignIn.png', fit: BoxFit.contain, height: 40,),
+ 
+        /*Text(
+          "TaskEase",
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            color: Color.fromARGB(255, 58, 83, 115),
+            fontSize: 30,
+            letterSpacing: 2
+          ),
+          ),
+          */
         actions: <Widget>[
           FlatButton.icon(onPressed: () {
             widget.toggleView();
@@ -39,11 +50,12 @@ class _SignInState extends State<SignIn> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 160.0, horizontal:50.0),
+        padding: EdgeInsets.symmetric(vertical: 50.0, horizontal:50.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
+              Image.asset('assets/images/TaskEase.png'),
               SizedBox(height: 20.0),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Email"),
@@ -52,7 +64,7 @@ class _SignInState extends State<SignIn> {
                   setState(() => email = val);
                 }
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Password"),
                 validator: (val) => val.length < 6 ? "Enter a password 6+ symbols long" : null,
@@ -63,7 +75,7 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 20.0),
               RaisedButton(
-                color: Colors.pink[400],
+                color: Color.fromARGB(255, 58, 83, 115),
                 child: Text("Sign in", style: TextStyle(color: Colors.white)),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {

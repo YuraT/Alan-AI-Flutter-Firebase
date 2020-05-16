@@ -27,11 +27,13 @@ class GroupDataScreen extends StatelessWidget {
       // userUid is only specified if the user is not included in the admins list of the group, who should be able to see all tasks
       value: DatabaseService(groupUid: groupData.uid, userUid: (groupData.admins.contains(user.uid) ? null : user.uid)).tasks,
       child: Scaffold(
-      backgroundColor: Colors.brown[50],
+            resizeToAvoidBottomPadding: false,
+      backgroundColor: Color.fromARGB(255, 229, 235, 239),
       appBar: AppBar(
-        title: Text(groupData.name),
-        backgroundColor: Colors.brown[400],
-        elevation: 0.0,
+        backgroundColor: Colors.white,
+        elevation: 10.0,
+        title: Image.asset('assets/images/logo_only.png', height: 50.0),
+
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.add), 
