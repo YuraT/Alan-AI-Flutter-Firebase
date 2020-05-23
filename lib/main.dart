@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
-import 'package:project1/models/user_data_model.dart';
 import 'package:project1/screens/wrapper.dart';
 import 'package:project1/services/auth.dart';
-import 'package:project1/services/database.dart';
 import "package:provider/provider.dart";
 
 
@@ -26,7 +23,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class DataStream extends StatelessWidget {
+/*class DataStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -45,8 +42,8 @@ class DataStream extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        home: Wrapper(),
+        home: Provider<Map<String, Key>>.value(value: keys, child:Wrapper()),
       )
     );
   }
-}
+}*/

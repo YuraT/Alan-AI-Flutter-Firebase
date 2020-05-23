@@ -1,10 +1,13 @@
 import "package:flutter/material.dart";
+import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
+import 'package:project1/models/user_data_model.dart';
 import 'package:project1/screens/authenticate/authenticate.dart';
 import 'package:project1/screens/home/group_data_screen.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
 import 'package:project1/screens/home/tasks_data_list.dart';
+import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:alan_voice/alan_voice.dart';
 
@@ -131,7 +134,7 @@ class _WrapperState extends State<Wrapper> {
       return Authenticate();
     } else {
       if (!_enabled) setState(() {_initAlanButton();});
-      return Provider<Map<String, Key>>.value(value: keys, child: Home(),);
+      return Home();
       //return Home(groupsDataKey: groupsDataKey,);
     }
   }
@@ -151,3 +154,32 @@ class _WrapperState extends State<Wrapper> {
     }
   }
 }*/
+
+
+class DataStream extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        StreamProvider<List<UserDataModel>>.value(
+          value: Provider.of<User>(context) == null ? null :
+            DatabaseService(/*add condition here later*/).users
+        ),
+        StreamProvider<List<GroupDataModel>>.value(
+          value: Provider.of<User>(context) == null ? null :
+            DatabaseService(userUid: Provider.of<User>(context).uid).groups
+        ),
+        StreamProvider<List<TaskDataModel>>.value(
+          value: Provider.of<User>(context) == null ? null :
+            DatabaseService(userUid: Provider.of<User>(context).uid).tasks
+        ),
+        Provider<Map<String, Key>>.value(
+          value: keys
+        ),
+      ],
+      child: MaterialApp(
+        home: Wrapper(),
+      ),
+    );
+  }
+}
