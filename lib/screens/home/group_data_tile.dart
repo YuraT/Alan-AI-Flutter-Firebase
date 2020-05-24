@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
+import 'package:project1/models/user.dart';
 import 'package:provider/provider.dart';
 
 class GroupDataTile extends StatelessWidget {
@@ -7,7 +8,7 @@ class GroupDataTile extends StatelessWidget {
   GroupDataTile({this.groupData});
   
   @override
-Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
@@ -16,7 +17,8 @@ Widget build(BuildContext context) {
           children: <Widget>[
             ListTile(
               title: Text("Group: ${groupData.name}"),
-              subtitle: Text("users: ${groupData.users.toString()}, admins: ${groupData.admins.toString()}"),
+              // subtitle is the amount of tasks in the group assigned to the logged in user
+              subtitle: Text("Your Tasks: ${Provider.of<List<TaskDataModel>>(context).where((task) => task.group == groupData.uid /*&& task.users.contains(Provider.of<User>(context))*/).length}"),
             ),
             RaisedButton(
               child: Text("route"), 
