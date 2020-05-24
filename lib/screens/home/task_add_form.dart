@@ -105,7 +105,7 @@ class TaskAddForm extends StatefulWidget {
   final String initialTask;
   @override
   TaskAddForm(this.groupData, this.initialTask);
-  _TaskAddFormState createState() => _TaskAddFormState();
+  _TaskAddFormState createState() => _TaskAddFormState(currentTitle: initialTask?? "");
 }
 
 class _TaskAddFormState extends State<TaskAddForm> {
@@ -113,11 +113,11 @@ class _TaskAddFormState extends State<TaskAddForm> {
   //final List<String> sugars = ['0','1','2','3','4'];
 
   // form values
-  String _currentTitle;
+  String currentTitle;
   String _currentDescription;
   List<String> _currentUsers;
   DateTime _currentDeadline;
-
+  _TaskAddFormState({this.currentTitle});
 
   //MULTI SELECT FUNCTION
 
@@ -175,9 +175,6 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.initialTask != null) setState(() {
-      _currentTitle = widget.initialTask;
-    });
     final user = Provider.of<User>(context);
     return SingleChildScrollView(
       child: Container(
@@ -194,9 +191,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
               ),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Title"),
-                initialValue: widget.initialTask?? "",
+                initialValue: currentTitle?? "",
                 validator: (val) => val.isEmpty ? "Please enter title" : null,
-                onChanged: (val) => setState(() => _currentTitle = val),
+                onChanged: (val) => setState(() => currentTitle = val),
               ),
               SizedBox(
                 height: 20.0,
@@ -282,7 +279,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(userUid: user.uid).createTask(
-                      _currentTitle,
+                      currentTitle,
                       _currentDescription,
                       widget.groupData.uid,
                       user.uid,
