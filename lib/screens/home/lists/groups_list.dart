@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
-import 'package:project1/screens/home/group_data_tile.dart';
-import 'package:project1/models/user_data_model.dart';
-import 'package:project1/screens/home/user_data_tile.dart';
+import 'package:project1/screens/home/lists/group_data_tile.dart';
 import 'package:provider/provider.dart';
 
 class GroupsList extends StatefulWidget {

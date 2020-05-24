@@ -4,7 +4,7 @@ import 'package:project1/models/user.dart';
 import 'package:project1/screens/home/task_add_form.dart';
 import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:project1/screens/home/tasks_data_list.dart';
+import 'package:project1/screens/home/lists/tasks_data_list.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class GroupDataScreen extends StatefulWidget {
