@@ -29,5 +29,3 @@ In the future, the app will be available on IOS, Android, and Web platforms
 
 * [Flutter](https://flutter.dev/) - App Native Code framework
 * [Alan](https://alan.app/) - Alan AI voice platform
-
-

@@ -4,33 +4,36 @@ import 'package:project1/screens/home/task_data_tile.dart';
 import 'package:provider/provider.dart';
 
 class TasksDataList extends StatefulWidget {
+  TasksDataList({Key tasksDataKey}) : super(key: tasksDataKey);
   @override
-  _TasksDataListState createState() => _TasksDataListState();
+  TasksDataListState createState() => TasksDataListState();
 }
 
-class _TasksDataListState extends State<TasksDataList> {
+class TasksDataListState extends State<TasksDataList> {
+  List<TaskDataModel> currentTasksData;
+
   @override
   Widget build(BuildContext context) {
     final tasksData = Provider.of<List<TaskDataModel>>(context) ?? [];
-    /*tasksData.forEach((taskData) {
-      print(taskData.title);
-      print(taskData.description);
-      print(taskData.users);
-    });*/
-
-    return Column(
-      children: <Widget>[
-        Text("Tasks for Group"),
-        Text("(specific to logged in user now)"),
-        ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: tasksData.length,
-          itemBuilder: (context, index) {
-            return TaskDataTile(taskData: tasksData[index]);
-          },
-        ),
-      ],
+    setState(() {
+      currentTasksData = tasksData;
+    });
+    print("lengthoftasks: ${tasksData.length}");
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Text("Tasks for Group"),
+          Text("(specific to logged in user now)"),
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: tasksData.length,
+            itemBuilder: (context, index) {
+              return TaskDataTile(taskData: tasksData[index]);
+            },
+          ),
+        ],
+      ),
     );
   }
 }

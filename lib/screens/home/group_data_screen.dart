@@ -7,29 +7,40 @@ import 'package:provider/provider.dart';
 import 'package:project1/screens/home/tasks_data_list.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class GroupDataScreen extends StatelessWidget {
+class GroupDataScreen extends StatefulWidget {
   final GroupDataModel groupData;
-  GroupDataScreen({this.groupData});
+  final GlobalKey<TasksDataListState> tasksDataKey;
+  //GroupDataScreen({this.groupData});
+  GroupDataScreen({Key groupDataScreenKey, @required this.groupData, this.tasksDataKey}) : super(key: groupDataScreenKey);
 
+  @override
+  GroupDataScreenState createState() => GroupDataScreenState();
+}
+
+class GroupDataScreenState extends State<GroupDataScreen> {
+  GroupDataModel currentGroupData;
+  
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-
+    setState(() {
+      currentGroupData = widget.groupData;//
+    });
     void _showTaskAddPanel() {
       showModalBottomSheet(context: context, builder: (context) {
         return Container(
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-          child: TaskAddForm(groupData),
+          child: TaskAddForm(currentGroupData/*widget.groupData*/, ""),
         );
       });
     }
     return StreamProvider<List<TaskDataModel>>.value(
       // userUid is only specified if the user is not included in the admins list of the group, who should be able to see all tasks
-      value: DatabaseService(groupUid: groupData.uid, userUid: (groupData.admins.contains(user.uid) ? null : user.uid)).tasks,
+      value: DatabaseService(groupUid: currentGroupData.uid/*widget.groupData.uid*/, userUid: (/*widget.groupData*/currentGroupData.admins.contains(user.uid) ? null : user.uid)).tasks,
       child: Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text(groupData.name),
+        title: Text(/*widget.groupData*/currentGroupData.name),
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
         actions: <Widget>[
@@ -38,12 +49,11 @@ class GroupDataScreen extends StatelessWidget {
             label: Text("Add Task"),
             onPressed: () => _showTaskAddPanel(), 
             ),
-            // (Avnish) add button that allows getting one-use invite code to group
           FlatButton.icon(
             icon: Icon(Icons.share),
             label: Text('Join Code'),
             onPressed: () async {
-              String vCode = await DatabaseService().getGroupInvite(user.uid, groupData.uid);
+              String vCode = await DatabaseService().getGroupInvite(user.uid, /*widget.groupData*/currentGroupData.uid);
 
               Alert(
                 context: context,
@@ -66,7 +76,7 @@ class GroupDataScreen extends StatelessWidget {
         ],
           ),
       body: 
-        TasksDataList(),
+        TasksDataList(tasksDataKey: Provider.of<Map<String, Key>>(context)["tasksDataKey"]),
       )
     );
   }
