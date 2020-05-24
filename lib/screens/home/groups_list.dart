@@ -16,7 +16,6 @@ class GroupsListState extends State<GroupsList> {
   @override
   Widget build(BuildContext context) {
     final groupsData = Provider.of<List<GroupDataModel>>(context) ?? [];
-    final usersData = Provider.of<List<UserDataModel>>(context) ?? [];
     setState(() => {groupsOfCurrentUser = groupsData});
     /*groupsData.forEach((groupData) {
       print(groupData.name);
@@ -25,7 +24,6 @@ class GroupsListState extends State<GroupsList> {
       return Text("something");
     });*/
 
-    //List<dynamic> lists = [groupsData, usersData];
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -39,17 +37,6 @@ class GroupsListState extends State<GroupsList> {
               return GroupDataTile(groupData: groupsData[index]);
             },
           ),
-
-          Text("Users (all users, not specific to groups yet)"),
-          Text("(Not to be present here in final version)"),
-          // users list view builder (not to be present here in final version)
-          ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: usersData.length,
-              itemBuilder: (context, index) {
-                return UserDataTile(userData: usersData[index]);
-              }),
         ],
       ),
     );
