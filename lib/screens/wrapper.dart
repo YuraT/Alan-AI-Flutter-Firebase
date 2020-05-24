@@ -2,10 +2,12 @@ import "package:flutter/material.dart";
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
+import 'package:project1/route_generator.dart';
 import 'package:project1/screens/authenticate/authenticate.dart';
 import 'package:project1/screens/home/group_data_screen.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
+import 'package:project1/screens/home/task_add_form.dart';
 import 'package:project1/screens/home/tasks_data_list.dart';
 import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
@@ -66,23 +68,40 @@ class _WrapperState extends State<Wrapper> {
       // print("context.widget.toStringShort:");
       // print("context.widget.toStringShort: ${context.widget.toStringShort()}");
       if (groupDataScreenKey.currentState == null){
-        Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context) {
-            return GroupDataScreen(groupDataScreenKey: groupDataScreenKey, groupData: groupData, tasksDataKey: tasksDataKey,);
-          }),
+        Navigator.of(context).pushNamed(
+          '/groupData',
+          arguments: {
+            "groupDataScreenKey": groupDataScreenKey, 
+            "groupData": groupData, 
+            "tasksDataKey": tasksDataKey
+          }
         );
       } else {
         if (groupDataScreenKey.currentState.currentGroupData != groupData) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return GroupDataScreen(groupDataScreenKey: groupDataScreenKey, groupData: groupData, tasksDataKey: tasksDataKey);
-            })
+          Navigator.of(context).pushReplacementNamed(
+            '/groupData',
+            arguments: {
+              "groupDataScreenKey": groupDataScreenKey, 
+              "groupData": groupData, 
+              "tasksDataKey": tasksDataKey
+            }
           );
         }
       }
     } else return null;
+  }
+
+  _handleAppendTask(String task, String groupName) {
+    if (groupName != null) _handleEnterGroup(groupName);
+    showModalBottomSheet(context: context, builder: (context) {
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+        child: TaskAddForm(groupDataScreenKey.currentState.currentGroupData, task)
+      );
+    });
+
+    AlanVoice.playText("creating task"+ task);
+    AlanVoice.playText("group is: "+ groupName);
   }
   
   @override
@@ -105,7 +124,7 @@ class _WrapperState extends State<Wrapper> {
           break;
         case "createTask":
           // Create task handler
-
+          _handleAppendTask(command["task"], command["groupName"]);
           AlanVoice.playText("task added successfully.");
           break;
         case "signOut":
@@ -178,7 +197,8 @@ class DataStream extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        home: Wrapper(),
+        initialRoute: '/',
+        onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
   }

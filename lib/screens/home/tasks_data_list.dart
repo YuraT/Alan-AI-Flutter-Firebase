@@ -18,20 +18,22 @@ class TasksDataListState extends State<TasksDataList> {
     setState(() {
       currentTasksData = tasksData;
     });
-
-    return Column(
-      children: <Widget>[
-        Text("Tasks for Group"),
-        Text("(specific to logged in user now)"),
-        ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: tasksData.length,
-          itemBuilder: (context, index) {
-            return TaskDataTile(taskData: tasksData[index]);
-          },
-        ),
-      ],
+    print("lengthoftasks: ${tasksData.length}");
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Text("Tasks for Group"),
+          Text("(specific to logged in user now)"),
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: tasksData.length,
+            itemBuilder: (context, index) {
+              return TaskDataTile(taskData: tasksData[index]);
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -30,7 +30,7 @@ class GroupDataScreenState extends State<GroupDataScreen> {
       showModalBottomSheet(context: context, builder: (context) {
         return Container(
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-          child: TaskAddForm(currentGroupData/*widget.groupData*/),
+          child: TaskAddForm(currentGroupData/*widget.groupData*/, ""),
         );
       });
     }
@@ -76,7 +76,7 @@ class GroupDataScreenState extends State<GroupDataScreen> {
         ],
           ),
       body: 
-        TasksDataList(tasksDataKey: widget.tasksDataKey /*Provider.of<Map<String, Key>>(context)["tasksDataKey"]*/),
+        TasksDataList(tasksDataKey: Provider.of<Map<String, Key>>(context)["tasksDataKey"]),
       )
     );
   }

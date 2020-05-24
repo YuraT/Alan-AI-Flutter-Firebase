@@ -102,8 +102,9 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
 
 class TaskAddForm extends StatefulWidget {
   final GroupDataModel groupData;
+  final String initialTask;
   @override
-  TaskAddForm(this.groupData);
+  TaskAddForm(this.groupData, this.initialTask);
   _TaskAddFormState createState() => _TaskAddFormState();
 }
 
@@ -146,7 +147,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
       builder: (BuildContext context) {
         return MultiSelectDialog(
           items: items,
-          initialSelectedValues: _currentUsers.toSet(), // initially select users from state
+          initialSelectedValues: (_currentUsers != null? _currentUsers.toSet() : null), // initially select users from state
         );
       },
     );
@@ -174,6 +175,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.initialTask != null) setState(() {
+      _currentTitle = widget.initialTask;
+    });
     final user = Provider.of<User>(context);
     return SingleChildScrollView(
       child: Container(
@@ -190,6 +194,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
               ),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Title"),
+                initialValue: widget.initialTask?? "",
                 validator: (val) => val.isEmpty ? "Please enter title" : null,
                 onChanged: (val) => setState(() => _currentTitle = val),
               ),
