@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/user.dart';
+import 'package:project1/models/user_data_model.dart';
+import 'package:provider/provider.dart';
 
 class TaskDataTile extends StatelessWidget {
   final TaskDataModel taskData;
@@ -7,6 +9,7 @@ class TaskDataTile extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    List<UserDataModel> users = Provider.of<List<UserDataModel>>(context);
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
@@ -15,7 +18,7 @@ class TaskDataTile extends StatelessWidget {
           children: <Widget>[
             ListTile(
               title: Text("Task: ${taskData.title}"),
-              subtitle: Text("Desc: ${taskData.description}, \nassigner: ${taskData.assigner}, \nusers: ${taskData.users}, \ndeadline:${taskData.deadline}"),
+              subtitle: Text("Desc: ${taskData.description}, \nassigner: ${users.singleWhere((user) => user.uid == taskData.assigner).username}, \nusers: ${users.where((user) => taskData.users.contains(user.uid)).map((user) => user.username)}, \ndeadline:${taskData.deadline}"),
             ),
           ],
         ),
