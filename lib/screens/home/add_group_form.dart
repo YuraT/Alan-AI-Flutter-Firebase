@@ -35,9 +35,10 @@ class _AddGroupFormState extends State<AddGroupForm> {
               width: 1200,
               height: 100,
               child: FlatButton(
-                color: Colors.white,
+                color: b,
+                textColor: Colors.white,
                 child: Text(
-                  'Create a New Group',
+                  'New Group',
                   style: TextStyle(
                     fontSize: 25.0,
                   ),
@@ -52,9 +53,14 @@ class _AddGroupFormState extends State<AddGroupForm> {
                         child: Column(
                           children: <Widget>[
                             TextFormField(
-                              validator: (val) => val.isEmpty ? "please enter group name" : null,
-                              onChanged: (val) => setState(() => _currentCreateName = val),
-                              decoration: textInputDecoration.copyWith(labelText: 'Group Name',),
+                              validator: (val) => val.isEmpty
+                                  ? "please enter group name"
+                                  : null,
+                              onChanged: (val) =>
+                                  setState(() => _currentCreateName = val),
+                              decoration: textInputDecoration.copyWith(
+                                labelText: 'Group Name',
+                              ),
                             ),
                           ],
                         ),
@@ -62,20 +68,21 @@ class _AddGroupFormState extends State<AddGroupForm> {
                       buttons: [
                         DialogButton(
                           onPressed: () async {
-                          if (_createFormkey.currentState.validate()) {
-                            try {
-                              await DatabaseService().createGroup(_currentCreateName, [user.uid], [user.uid]);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            } catch (e) {
-                              // need to do better error handling here
-                              setState(() {
-                              error = e.toString();
-                              });
-                              print(error);
+                            if (_createFormkey.currentState.validate()) {
+                              try {
+                                await DatabaseService().createGroup(
+                                    _currentCreateName, [user.uid], [user.uid]);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              } catch (e) {
+                                // need to do better error handling here
+                                setState(() {
+                                  error = e.toString();
+                                });
+                                print(error);
+                              }
                             }
-                          }
-                        },
+                          },
                           child: Text(
                             "Create",
                             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -92,9 +99,10 @@ class _AddGroupFormState extends State<AddGroupForm> {
               width: 1200,
               height: 100,
               child: FlatButton(
-                color: Colors.white,
+                color: b,
+                textColor: Colors.white,
                 child: Text(
-                  'Join an existing Group',
+                  'Join Group',
                   style: TextStyle(
                     fontSize: 25.0,
                   ),
@@ -102,44 +110,46 @@ class _AddGroupFormState extends State<AddGroupForm> {
                 onPressed: () {
                   String error = '';
                   Alert(
-                    context: context,
-                    title: "Join Group",
-                    content: Form(
-                      key: _joinFormkey,
-                      child: Column(
-                        children: <Widget>[
-                          TextFormField(
-                            validator: (val) => val.isEmpty ? "please enter code" : null,
-                            onChanged: (val) => setState(() => _currentJoinCode = val),
-                            decoration: textInputDecoration.copyWith(labelText: "Verification Code")
-                          ),
-                        ],
-                      ),
-                    ),
-                    buttons: [
-                      DialogButton(
-                        onPressed: () async {
-                          if (_joinFormkey.currentState.validate()) {
-                            try {
-                              await DatabaseService().joinGroup(user.uid, _currentJoinCode);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            } catch (e) {
-                              // need to do better error handling here
-                              setState(() {
-                              error = e.toString();
-                              });
-                              print(error);
-                            }
-                          }
-                        },
-                        child: Text(
-                          "Join",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                      context: context,
+                      title: "Join Group",
+                      content: Form(
+                        key: _joinFormkey,
+                        child: Column(
+                          children: <Widget>[
+                            TextFormField(
+                                validator: (val) =>
+                                    val.isEmpty ? "please enter code" : null,
+                                onChanged: (val) =>
+                                    setState(() => _currentJoinCode = val),
+                                decoration: textInputDecoration.copyWith(
+                                    labelText: "Verification Code")),
+                          ],
                         ),
-                      )
-                    ]
-                  ).show();
+                      ),
+                      buttons: [
+                        DialogButton(
+                          onPressed: () async {
+                            if (_joinFormkey.currentState.validate()) {
+                              try {
+                                await DatabaseService()
+                                    .joinGroup(user.uid, _currentJoinCode);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              } catch (e) {
+                                // need to do better error handling here
+                                setState(() {
+                                  error = e.toString();
+                                });
+                                print(error);
+                              }
+                            }
+                          },
+                          child: Text(
+                            "Join",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                        )
+                      ]).show();
                 },
               ),
             ),

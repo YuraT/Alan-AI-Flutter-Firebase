@@ -6,8 +6,6 @@ import 'package:project1/services/database.dart';
 import 'package:project1/shared/constants.dart';
 import 'package:provider/provider.dart';
 
-
-
 // START StackOverflow Code
 
 class MultiSelectDialogItem<V> {
@@ -18,7 +16,8 @@ class MultiSelectDialogItem<V> {
 }
 
 class MultiSelectDialog<V> extends StatefulWidget {
-  MultiSelectDialog({Key key, this.items, this.initialSelectedValues}) : super(key: key);
+  MultiSelectDialog({Key key, this.items, this.initialSelectedValues})
+      : super(key: key);
 
   final List<MultiSelectDialogItem<V>> items;
   final Set<V> initialSelectedValues;
@@ -96,16 +95,13 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
 
 //END StackOverflow Code
 
-
-
-
-
 class TaskAddForm extends StatefulWidget {
   final GroupDataModel groupData;
   final String initialTask;
   @override
   TaskAddForm(this.groupData, this.initialTask);
-  _TaskAddFormState createState() => _TaskAddFormState(currentTitle: initialTask?? "");
+  _TaskAddFormState createState() =>
+      _TaskAddFormState(currentTitle: initialTask ?? "");
 }
 
 class _TaskAddFormState extends State<TaskAddForm> {
@@ -121,23 +117,23 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   //MULTI SELECT FUNCTION
 
-  List <MultiSelectDialogItem<String>>  multiItem = List();
+  List<MultiSelectDialogItem<String>> multiItem = List();
 
-
-
-  void populateMultiSelect(Map<String, String> valuesToPopulate){
-    for(String v in valuesToPopulate.keys){
+  void populateMultiSelect(Map<String, String> valuesToPopulate) {
+    for (String v in valuesToPopulate.keys) {
       multiItem.add(MultiSelectDialogItem(v, valuesToPopulate[v]));
     }
   }
 
-
-
   void _showMultiSelect(BuildContext context) async {
     multiItem = [];
-    Map<String, String> valuesToPopulate =  {};
-    Provider.of<List<UserDataModel>>(context).where((user) => widget.groupData.users.contains(user.uid)).forEach((user) { // have to add a method later to only let admins assign to all users
-      valuesToPopulate.putIfAbsent(user.uid, () => user.firstName + " " + user.lastName);
+    Map<String, String> valuesToPopulate = {};
+    Provider.of<List<UserDataModel>>(context)
+        .where((user) => widget.groupData.users.contains(user.uid))
+        .forEach((user) {
+      // have to add a method later to only let admins assign to all users
+      valuesToPopulate.putIfAbsent(
+          user.uid, () => user.firstName + " " + user.lastName);
     });
     populateMultiSelect(valuesToPopulate);
     final items = multiItem;
@@ -147,7 +143,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
       builder: (BuildContext context) {
         return MultiSelectDialog(
           items: items,
-          initialSelectedValues: (_currentUsers != null? _currentUsers.toSet() : null), // initially select users from state
+          initialSelectedValues: (_currentUsers != null
+              ? _currentUsers.toSet()
+              : null), // initially select users from state
         );
       },
     );
@@ -170,9 +168,6 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   //MULTI SELECT FUNCTION
 
-
-
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -191,7 +186,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
               ),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Title"),
-                initialValue: currentTitle?? "",
+                initialValue: currentTitle ?? "",
                 validator: (val) => val.isEmpty ? "Please enter title" : null,
                 onChanged: (val) => setState(() => currentTitle = val),
               ),
@@ -199,8 +194,10 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 height: 20.0,
               ),
               TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: "Description"),
-                validator: (val) => val.isEmpty ? "Please enter description" : null,
+                decoration:
+                    textInputDecoration.copyWith(hintText: "Description"),
+                validator: (val) =>
+                    val.isEmpty ? "Please enter description" : null,
                 onChanged: (val) => setState(() => _currentDescription = val),
               ),
               SizedBox(
@@ -217,7 +214,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 height: 10.0,
               ),
 
-            /*  TextFormField(
+              /*  TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: "Employees"),
                 validator: (val) => val.isEmpty ? "Please enter employees" : null,
                 // change [val] to proper list later, need to make this some sort of dropdown but also be able to select multiple users
@@ -225,22 +222,25 @@ class _TaskAddFormState extends State<TaskAddForm> {
               ),
 */
               // (Ava) (Parul) add a date picker below (ignore all the commented code, its old stuff from the tutorials)
-              Text(_currentDeadline == null ? 'No date has been picked yet' : _currentDeadline.toString()),
+              Text(_currentDeadline == null
+                  ? 'No date has been picked yet'
+                  : _currentDeadline.toString()),
               RaisedButton(
                 child: Text('Pick a date'),
                 onPressed: () {
                   showDatePicker(
-                    context: context,
-                    initialDate: _currentDeadline == null ? DateTime.now() :
-                    _currentDeadline,
-                    firstDate: DateTime(2020),
-                    lastDate: DateTime(2030)
-                  ).then((date) {
-                      setState(() {
+                          context: context,
+                          initialDate: _currentDeadline == null
+                              ? DateTime.now()
+                              : _currentDeadline,
+                          firstDate: DateTime(2020),
+                          lastDate: DateTime(2030))
+                      .then((date) {
+                    setState(() {
                       _currentDeadline = date;
                     });
                   });
-                  },
+                },
               ),
               SizedBox(
                 height: 10.0,
@@ -271,7 +271,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 ),*/
 
               RaisedButton(
-                color: Colors.pink[400],
+                color: b,
                 child: Text(
                   "Submit",
                   style: TextStyle(color: Colors.white),
