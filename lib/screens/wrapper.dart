@@ -118,7 +118,7 @@ class _WrapperState extends State<Wrapper> {
           _handleEnterGroup(command["groupName"]);
           break;
         case "readTasks":
-          String _tasks = _handleReadTasks(command["groupName"]?? null);
+          String _tasks = _handleReadTasks(/*command["groupName"]??*/ null);
           if (_tasks == null) AlanVoice.playText("could not read tasks");
           else AlanVoice.playText("$_tasks");
           break;
