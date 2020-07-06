@@ -26,40 +26,62 @@ class _SignInState extends State<SignIn> {
     return loading
         ? Loading()
         : Scaffold(
-            resizeToAvoidBottomPadding: false,
-            backgroundColor: c,
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: a,
+
+              backgroundColor: Colors.transparent,
               elevation: 0.0,
-              title: Text("Sign in to App"),
-              actions: <Widget>[
-                FlatButton.icon(
-                    onPressed: () {
-                      widget.toggleView();
-                    },
-                    icon: Icon(Icons.person),
-                    label: Text("Register"))
-              ],
+              title: Text("  TaskV"),
+              //actions: <Widget>[
+                //FlatButton.icon(
+                  //onPressed: () {
+                      //widget.toggleView();
+                    //},
+                    //icon: Icon(Icons.person),
+                    //label: Text("Sign Up"))
+              //],
             ),
-            body: Container(
-              padding: EdgeInsets.symmetric(vertical: 160.0, horizontal: 50.0),
+            body: SingleChildScrollView(
+              //height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 50.0),
               child: Form(
                 key: _formKey,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    SizedBox(height: 20.0),
+                    Text("Sign In", style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold
+                    ),),
+                    SizedBox(height: 15.0),
+                    Text("- Login to TaskV -", style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey[800]
+                    ),),
+                    SizedBox(height: 28.0),
                     TextFormField(
-                        decoration:
-                            textInputDecoration.copyWith(hintText: "Email"),
+                        decoration: InputDecoration(
+                          labelText: "Email",
+                          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey[400])
+                          ),
+                        ),
                         validator: (val) =>
                             val.isEmpty ? "Enter an email" : null,
                         onChanged: (val) {
                           setState(() => email = val);
                         }),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 10.0),
                     TextFormField(
-                        decoration:
-                            textInputDecoration.copyWith(hintText: "Password"),
+                        decoration: InputDecoration(
+                          labelText: "Password",
+                          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey[400])
+                          ),
+                        ),
                         validator: (val) => val.length < 6
                             ? "Enter a password 6+ symbols long"
                             : null,
@@ -67,11 +89,16 @@ class _SignInState extends State<SignIn> {
                         onChanged: (val) {
                           setState(() => password = val);
                         }),
-                    SizedBox(height: 20.0),
-                    RaisedButton(
-                      color: b,
+                    SizedBox(height: 14.0),
+                    MaterialButton(
+                      minWidth: double.infinity,
+                      height: 40,
+                      color: Colors.blue[600],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)
+                      ),
                       child: Text("Sign in",
-                          style: TextStyle(color: Colors.white)),
+                          style: TextStyle(color: Colors.white, fontSize: 15)),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           setState(() => loading = true);
@@ -79,7 +106,7 @@ class _SignInState extends State<SignIn> {
                               .signInWithEmailAndPassword(email, password);
                           if (result == null) {
                             setState(() {
-                              error = 'problem signing in';
+                              error = 'Problem Signing In';
                               loading = false;
                             });
                             print(error);
@@ -87,7 +114,36 @@ class _SignInState extends State<SignIn> {
                         }
                       },
                     ),
-                    SizedBox(height: 12.0),
+                    SizedBox(height: 8.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Don't have an account? "),
+                        FlatButton(
+                          color: Colors.transparent,
+                          textColor: Colors.black,
+                          padding: EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 0.0),
+                          onPressed: (){
+                            widget.toggleView();
+                          },
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(fontSize: 18)
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10.0),
+                    Container(
+                      height: MediaQuery.of(context).size.height / 3,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("assets/login_pic.png"),
+                            fit: BoxFit.cover
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
                     Text(error,
                         style: TextStyle(color: Colors.red, fontSize: 14.0)),
                   ],
