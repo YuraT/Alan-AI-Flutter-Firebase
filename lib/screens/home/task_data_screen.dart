@@ -20,10 +20,11 @@ class TaskDataScreenState extends State<TaskDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final user = Provider.of<User>(context);
     setState(() {
       currentTaskData = widget.taskData; 
     });
+    final List<UserDataModel> _allUsers = Provider.of<List<UserDataModel>>(context);
+    final List<UserDataModel> _taskUsers = _allUsers.where((user) => currentTaskData.users.contains( user.uid)).toList();
 
     return Scaffold(
       backgroundColor: c,
@@ -43,6 +44,17 @@ class TaskDataScreenState extends State<TaskDataScreen> {
       body: Column(
         children: <Widget>[
           Text(currentTaskData.description),
+          Text("completed: ${currentTaskData.completedStatus}"),
+          Text("deadline: ${currentTaskData.deadline}"),
+          Text("assigner: ${_allUsers.singleWhere((user) => user.uid == currentTaskData.assigner).username}"),
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: _taskUsers.length,
+            itemBuilder: (context, index) {
+              return Text("user $index: ${_taskUsers[index].username}");
+            },
+          ),
         ],
       )
     );

@@ -18,7 +18,6 @@ class TasksDataListState extends State<TasksDataList> {
     setState(() {
       currentTasksData = tasksData;
     });
-    print("lengthoftasks: ${tasksData.length}");
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
