@@ -21,8 +21,13 @@ class TasksDataListState extends State<TasksDataList> {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          Text("Tasks for Group"),
-          Text("(specific to logged in user now)"),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
+            child: Text("Tasks for Group",
+              style: TextStyle(fontSize: 12.5),),
+          ),
+          Text("(specific to logged in user now)",
+            style: TextStyle(fontSize: 12.5),),
           ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
