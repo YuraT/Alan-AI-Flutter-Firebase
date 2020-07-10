@@ -36,34 +36,50 @@ class _SettingsFormState extends State<SettingsForm> {
                     "Update your settings",
                     style: TextStyle(fontSize: 18.0),
                   ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
+                  SizedBox(height: 15.0),
                   TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "First Name",
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[400])),
+                    ),
                     initialValue: currentUser.firstName,
-                    decoration: textInputDecoration,
                     validator: (val) =>
-                        val.isEmpty ? "Please enter first name" : null,
+                    val.isEmpty ? "Please enter first name" : null,
                     onChanged: (val) => setState(() => _currentFirstName = val),
                   ),
                   SizedBox(
-                    height: 15.0,
+                    height: 13.0,
                   ),
                   TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "Last Name",
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[400])),
+                    ),
                     initialValue: currentUser.lastName,
-                    decoration: textInputDecoration,
                     validator: (val) =>
-                        val.isEmpty ? "Please enter last name" : null,
+                    val.isEmpty ? "Please enter last name" : null,
                     onChanged: (val) => setState(() => _currentLastName = val),
                   ),
                   SizedBox(
-                    height: 16.0,
+                    height: 13.0,
                   ),
                   TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "Username",
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[400])),
+                    ),
                     initialValue: currentUser.username,
-                    decoration: textInputDecoration,
                     validator: (val) =>
-                        val.isEmpty ? "Please enter username name" : null,
+                    val.isEmpty ? "Please enter username name" : null,
                     onChanged: (val) => setState(() => _currentUsername = val),
                   ),
                   // dropdown menu
@@ -90,8 +106,12 @@ class _SettingsFormState extends State<SettingsForm> {
                   divisions: 8,
                   onChanged: (val) => setState(() => _currentStrength = val.round()),
                 ),*/
-                  RaisedButton(
-                    color: b,
+                  SizedBox(height: 14.0),
+                  MaterialButton(
+                    color: Colors.blue[600],
+                    minWidth: double.infinity,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
                     child: Text(
                       "Update",
                       style: TextStyle(color: Colors.white),
