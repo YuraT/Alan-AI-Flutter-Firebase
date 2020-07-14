@@ -93,7 +93,7 @@ class _WrapperState extends State<Wrapper> {
     } else return null;
   }
 
-  _handleAppendTask(String task, String groupName) {
+  void _handleCreateTask(String task, String groupName) {
     if (groupName != null) _handleEnterGroup(groupName);
     showModalBottomSheet(context: context, builder: (context) {
       return Container(
@@ -104,6 +104,16 @@ class _WrapperState extends State<Wrapper> {
 
     AlanVoice.playText("creating task"+ task);
     AlanVoice.playText("group is: "+ groupName);
+  }
+
+  void _handleCompleteCurrentTask() {
+    if (taskDataScreenKey.currentState == null) {
+      AlanVoice.playText("you are not on a task screen"); 
+    }
+    DatabaseService().updateTaskData(
+      taskDataScreenKey.currentState.currentTaskData.uid, 
+      {"completedStatus": true}
+    );
   }
   
   @override
@@ -126,8 +136,11 @@ class _WrapperState extends State<Wrapper> {
           break;
         case "createTask":
           // Create task handler
-          _handleAppendTask(command["task"], command["groupName"]);
+          _handleCreateTask(command["task"], command["groupName"]);
           AlanVoice.playText("task added successfully.");
+          break;
+        case "completeTask":
+          _handleCompleteCurrentTask();
           break;
         case "signOut":
           // signing out handler

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project1/services/database.dart';
 import 'package:project1/shared/constants.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
@@ -36,7 +37,14 @@ class TaskDataScreenState extends State<TaskDataScreen> {
           FlatButton.icon(
             icon: Icon(Icons.check),
             label: Text("Complete Task"),
-            onPressed: () => {},
+            onPressed: () => {
+              DatabaseService().updateTaskData(
+                currentTaskData.uid, 
+                {"completedStatus" : true}
+              ).then((val) => {
+                Navigator.pop(context)
+              })
+            },
           ),
         ],
       ),
