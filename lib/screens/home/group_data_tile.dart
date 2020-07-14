@@ -12,6 +12,9 @@ class GroupDataTile extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
+        shape: RoundedRectangleBorder(
+            side: BorderSide(color:Colors.grey, width: 2.0),
+            borderRadius: BorderRadius.circular(4.0)),
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
         child: Column(
           children: <Widget>[
@@ -20,22 +23,25 @@ class GroupDataTile extends StatelessWidget {
               subtitle: Text(
                   "users: ${groupData.users.toString()}, admins: ${groupData.admins.toString()}"),
             ),
-            RaisedButton(
-              child: Text("route"),
-              textColor: Colors.white,
-              color: b,
-              onPressed: () {
-                Key groupDataScreenKey = Provider.of<Map<String, Key>>(
-                    context)["groupDataScreenKey"];
-                Key tasksDataKey =
+            ButtonBar(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.arrow_forward),
+                  color: b,
+                  onPressed: () {
+                    Key groupDataScreenKey = Provider.of<Map<String, Key>>(
+                        context)["groupDataScreenKey"];
+                    Key tasksDataKey =
                     Provider.of<Map<String, Key>>(context)["tasksDataKey"];
 
-                Navigator.of(context).pushNamed('/groupData', arguments: {
-                  "groupDataScreenKey": groupDataScreenKey,
-                  "groupData": groupData,
-                  "tasksDataKey": tasksDataKey
-                });
-              },
+                    Navigator.of(context).pushNamed('/groupData', arguments: {
+                      "groupDataScreenKey": groupDataScreenKey,
+                      "groupData": groupData,
+                      "tasksDataKey": tasksDataKey
+                    });
+                  },
+                )
+              ],
             )
           ],
         ),

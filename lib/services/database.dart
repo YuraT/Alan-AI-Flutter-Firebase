@@ -65,6 +65,13 @@ class DatabaseService {
       print(e.toString());
     }
   }
+  Future updateTaskData(String taskUid, Map<String, dynamic> updates) {
+    try {
+      return tasksCollection.document(taskUid).updateData(updates);
+    } catch (e) {
+      print(e.toString());
+    }
+  } 
 
   Future updateUserData(String firstName, String lastName, String username) async {
     return await usersCollection.document(userUid).setData( {
@@ -111,6 +118,7 @@ class DatabaseService {
   List<TaskDataModel> _tasksListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return TaskDataModel(
+        uid: doc.documentID,
         title: doc.data["title"],
         description: doc.data["description"],
         assigner: doc.data["assigner"],
@@ -127,15 +135,8 @@ class DatabaseService {
 
   // currentUserData from snapshot
   CurrentUserData _currentUserDataFromSnapshot(DocumentSnapshot documentSnapshot) {
-    //print("tasks reference:   " + snapshot.data["tasks"]); // doesn't work yet
     return CurrentUserData(
       uid: userUid,
-      // the tasks stuff in this function was inteded to provide a list of tasks specific to current user
-      // Im not sure if I will keep this stuff here or find a different way to do it
-      //tasks: _tasksListFromSnapshot(snapshot), // doesn't work yet either
-      //tasks: [TaskDataModel(title: "task1", description: "desc1", deadline: DateTime.utc(2020, 4, 26, 14, 0)), TaskDataModel(title: "task2", description: "desc2", deadline: DateTime.utc(2020, 4, 19, 14, 0))],
-      //tasks: List.from(documentSnapshot.data["tasks"]),
-      // holy crap all of that is absolute trash but Ill leave it there just in case I decide to use it later
       firstName: documentSnapshot.data["firstName"],
       lastName: documentSnapshot.data["lastName"],
       username: documentSnapshot.data["username"]

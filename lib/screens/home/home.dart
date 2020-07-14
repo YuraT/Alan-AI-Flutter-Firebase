@@ -40,20 +40,18 @@ class Home extends StatelessWidget {
         backgroundColor: a,
         elevation: 0.0,
         actions: <Widget>[
-          FlatButton.icon(
+          IconButton(
               onPressed: () async {
                 await _auth.signOut();
               },
               icon: Icon(Icons.exit_to_app),
-              label: Text("Logout")),
-          FlatButton.icon(
+          ),
+          IconButton(
             icon: Icon(Icons.settings),
-            label: Text("Settings"),
             onPressed: () => _showSettingsPanel(),
           ),
-          FlatButton.icon(
+          IconButton(
             icon: Icon(Icons.add_circle_outline),
-            label: Text("New Group"),
             onPressed: () => _showAddGroupPanel(),
           )
         ],

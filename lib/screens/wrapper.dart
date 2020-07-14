@@ -8,6 +8,7 @@ import 'package:project1/screens/home/group_data_screen.dart';
 import 'package:project1/screens/home/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
 import 'package:project1/screens/home/task_add_form.dart';
+import 'package:project1/screens/home/task_data_screen.dart';
 import 'package:project1/screens/home/tasks_data_list.dart';
 import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
@@ -17,14 +18,15 @@ import 'package:alan_voice/alan_voice.dart';
 // might not need this with the new structure
 final Map<String, Key> keys = {
   "groupsDataKey" : groupsDataKey,
+  "tasksDataKey": tasksDataKey,
   "groupDataScreenKey" : groupDataScreenKey,
-  "tasksDataKey": tasksDataKey
+  "taskDataScreenKey" : taskDataScreenKey,
 
 };
-
 final groupsDataKey = GlobalKey<GroupsListState>();
-final groupDataScreenKey = GlobalKey<GroupDataScreenState>();
 final tasksDataKey = GlobalKey<TasksDataListState>();
+final groupDataScreenKey = GlobalKey<GroupDataScreenState>();
+final taskDataScreenKey = GlobalKey<TaskDataScreenState>();
 
 class Wrapper extends StatefulWidget {
   @override
@@ -91,7 +93,7 @@ class _WrapperState extends State<Wrapper> {
     } else return null;
   }
 
-  _handleAppendTask(String task, String groupName) {
+  void _handleCreateTask(String task, String groupName) {
     if (groupName != null) _handleEnterGroup(groupName);
     showModalBottomSheet(context: context, builder: (context) {
       return Container(
@@ -102,6 +104,16 @@ class _WrapperState extends State<Wrapper> {
 
     AlanVoice.playText("creating task"+ task);
     AlanVoice.playText("group is: "+ groupName);
+  }
+
+  void _handleCompleteCurrentTask() {
+    if (taskDataScreenKey.currentState == null) {
+      AlanVoice.playText("you are not on a task screen"); 
+    }
+    DatabaseService().updateTaskData(
+      taskDataScreenKey.currentState.currentTaskData.uid, 
+      {"completedStatus": true}
+    );
   }
   
   @override
@@ -118,14 +130,17 @@ class _WrapperState extends State<Wrapper> {
           _handleEnterGroup(command["groupName"]);
           break;
         case "readTasks":
-          String _tasks = _handleReadTasks(command["groupName"]?? null);
+          String _tasks = _handleReadTasks(/*command["groupName"]??*/ null);
           if (_tasks == null) AlanVoice.playText("could not read tasks");
           else AlanVoice.playText("$_tasks");
           break;
         case "createTask":
           // Create task handler
-          _handleAppendTask(command["task"], command["groupName"]);
+          _handleCreateTask(command["task"], command["groupName"]);
           AlanVoice.playText("task added successfully.");
+          break;
+        case "completeTask":
+          _handleCompleteCurrentTask();
           break;
         case "signOut":
           // signing out handler

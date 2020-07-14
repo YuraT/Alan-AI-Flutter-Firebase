@@ -15,6 +15,7 @@ class CurrentUserData {
 }
 
 class TaskDataModel {
+  final String uid;
   final String title;
   final String description;
   final String group;
@@ -23,5 +24,5 @@ class TaskDataModel {
   final DateTime deadline;
   final bool completedStatus;
 
-  TaskDataModel({this.title, this.description, this.group, this.assigner, this.users, this.deadline, this.completedStatus});
+  TaskDataModel({this.uid, this.title, this.description, this.group, this.assigner, this.users, this.deadline, this.completedStatus});
 }

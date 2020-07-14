@@ -41,13 +41,13 @@ class GroupDataScreenState extends State<GroupDataScreen> {
     }
 
     return StreamProvider<List<TaskDataModel>>.value(
-        // userUid is only specified if the user is not included in the admins list of the group, who should be able to see all tasks
+      // userUid is only specified if the user is not included in the admins list of the group, who should be able to see all tasks
         value: DatabaseService(
-                groupUid: currentGroupData.uid /*widget.groupData.uid*/,
-                userUid: (/*widget.groupData*/ currentGroupData.admins
-                        .contains(user.uid)
-                    ? null
-                    : user.uid))
+            groupUid: currentGroupData.uid /*widget.groupData.uid*/,
+            userUid: (/*widget.groupData*/ currentGroupData.admins
+                .contains(user.uid)
+                ? null
+                : user.uid))
             .tasks,
         child: Scaffold(
           backgroundColor: c,
@@ -58,12 +58,14 @@ class GroupDataScreenState extends State<GroupDataScreen> {
             actions: <Widget>[
               FlatButton.icon(
                 icon: Icon(Icons.add),
-                label: Text("Add Task"),
+                label: Text('Add Task',
+                  style: TextStyle(fontSize: 15),),
                 onPressed: () => _showTaskAddPanel(),
               ),
               FlatButton.icon(
                 icon: Icon(Icons.share),
-                label: Text('Join Code'),
+                label: Text('Invite',
+                  style: TextStyle(fontSize: 15),),
                 onPressed: () async {
                   String vCode = await DatabaseService().getGroupInvite(
                       user.uid, /*widget.groupData*/ currentGroupData.uid);
@@ -90,7 +92,7 @@ class GroupDataScreenState extends State<GroupDataScreen> {
           ),
           body: TasksDataList(
               tasksDataKey:
-                  Provider.of<Map<String, Key>>(context)["tasksDataKey"]),
+              Provider.of<Map<String, Key>>(context)["tasksDataKey"]),
         ));
   }
 }
