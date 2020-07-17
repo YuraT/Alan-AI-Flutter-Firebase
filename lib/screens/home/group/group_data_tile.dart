@@ -23,6 +23,10 @@ class GroupDataTile extends StatelessWidget {
             ListTile(
               title: Text("Group: ${groupData.name}"), // subtitle is the amount of tasks in the group assigned to the logged in user
               subtitle: Text("Your Tasks: ${tasks.where((task) => task.group == groupData.uid && task.users.contains(Provider.of<User>(context).uid) && !task.completedStatus).length}"),
+              trailing: Icon(
+                Icons.arrow_forward,
+                color: b,
+              ),
               onTap: () {
                 Key groupDataScreenKey = Provider.of<Map<String, Key>>(
                     context)["groupDataScreenKey"];
@@ -35,13 +39,6 @@ class GroupDataTile extends StatelessWidget {
                   "tasksDataKey": tasksDataKey
                 });
               },
-            ),
-            Align(
-              alignment: Alignment(0.9, 0),
-              child: Icon(
-                Icons.arrow_forward,
-                color: b,
-                ),
             ),
           ],
         ),

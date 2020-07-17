@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/user.dart';
-import 'package:project1/screens/home/task_data_tile.dart';
+import 'package:project1/screens/home/task/task_data_tile.dart';
 import 'package:provider/provider.dart';
 
 class TasksDataList extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project1/screens/home/group_data_screen.dart';
-import 'package:project1/screens/home/task_data_screen.dart';
+import 'package:project1/screens/home/group/group_data_screen.dart';
+import 'package:project1/screens/home/task/task_data_screen.dart';
 import 'package:project1/screens/wrapper.dart';
 
 class RouteGenerator {

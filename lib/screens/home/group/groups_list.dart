@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
-import 'package:project1/screens/home/group_data_tile.dart';
-import 'package:project1/models/user_data_model.dart';
-import 'package:project1/screens/home/user_data_tile.dart';
+import 'package:project1/screens/home/group/group_data_tile.dart';
 import 'package:provider/provider.dart';
 
 class GroupsList extends StatefulWidget {
@@ -16,7 +14,6 @@ class GroupsListState extends State<GroupsList> {
   @override
   Widget build(BuildContext context) {
     final groupsData = Provider.of<List<GroupDataModel>>(context) ?? [];
-    final usersData = Provider.of<List<UserDataModel>>(context) ?? [];
     setState(() => {groupsOfCurrentUser = groupsData});
     /*groupsData.forEach((groupData) {
       print(groupData.name);

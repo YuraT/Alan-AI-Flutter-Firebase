@@ -24,6 +24,10 @@ class TaskDataTile extends StatelessWidget {
             ListTile(
               title: Text("Task: ${taskData.title}"),
               subtitle: Text("Desc: ${taskData.description}, \nassigner: ${users.singleWhere((user) => user.uid == taskData.assigner).username}, \nusers: ${users.where((user) => taskData.users.contains(user.uid)).map((user) => user.username)}, \ndeadline: ${DateFormat("M/d/y").format(taskData.deadline)}"),
+              trailing: Icon(
+                Icons.arrow_forward,
+                color: b,
+                ),
               onTap: () {
                 Key taskDataScreenKey = Provider.of<Map<String, Key>>(
                     context)["taskDataScreenKey"];
@@ -32,14 +36,7 @@ class TaskDataTile extends StatelessWidget {
                   "taskData": taskData,
                 });
               },
-            ),
-            Align(
-              alignment: Alignment(0.9, 0),
-              child: Icon(
-                Icons.arrow_forward,
-                color: b,
-                ),
-            ),
+            )
           ],
         ),
       ),
