@@ -121,9 +121,10 @@ class DatabaseService {
         uid: doc.documentID,
         title: doc.data["title"],
         description: doc.data["description"],
+        group: doc.data["group"],
         assigner: doc.data["assigner"],
         users: List.from(doc.data["users"]),
-        deadline: /*DateTime.utc(2020, 4, 26, 14, 0),*/doc.data["deadline"].toDate(),
+        deadline: doc.data["deadline"].toDate(),
         completedStatus: doc.data["completedStatus"],
       );
     }).toList();
