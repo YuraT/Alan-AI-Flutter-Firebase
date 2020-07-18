@@ -103,7 +103,7 @@ class TaskAddForm extends StatefulWidget {
   final DateTime initialDeadline;
   @override
   TaskAddForm(this.groupData, {this.initialTitle, this.initialDescription, this.initialUsers, this.initialDeadline});
-  _TaskAddFormState createState() => _TaskAddFormState();
+  _TaskAddFormState createState() => _TaskAddFormState(currentTitle: initialTitle, currentDescription: initialDescription, currentUsers: initialUsers, currentDeadline: initialDeadline);
 }
 
 class _TaskAddFormState extends State<TaskAddForm> {
@@ -115,6 +115,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
   String currentDescription;
   List<String> currentUsers;
   DateTime currentDeadline;
+  _TaskAddFormState({this.currentTitle, this.currentDescription, this.currentUsers, this.currentDeadline});
   //MULTI SELECT FUNCTION
 
   List<MultiSelectDialogItem<String>> multiItem = List();
@@ -171,12 +172,6 @@ class _TaskAddFormState extends State<TaskAddForm> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    setState(() {
-      this.currentTitle = widget.initialTitle;
-      this.currentDescription = widget.initialDescription;
-      this.currentUsers = widget.initialUsers;
-      this.currentDeadline = widget.initialDeadline;
-    });
     return SingleChildScrollView(
       child: Container(
         child: Form(
