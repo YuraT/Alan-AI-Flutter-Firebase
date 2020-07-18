@@ -97,11 +97,13 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
 
 class TaskAddForm extends StatefulWidget {
   final GroupDataModel groupData;
-  final String initialTask;
+  final String initialTitle;
+  final String initialDescription;
+  final List<String> initialUsers;
+  final DateTime initialDeadline;
   @override
-  TaskAddForm(this.groupData, this.initialTask);
-  _TaskAddFormState createState() =>
-      _TaskAddFormState(currentTitle: initialTask ?? "");
+  TaskAddForm(this.groupData, {this.initialTitle, this.initialDescription, this.initialUsers, this.initialDeadline});
+  _TaskAddFormState createState() => _TaskAddFormState();
 }
 
 class _TaskAddFormState extends State<TaskAddForm> {
@@ -110,11 +112,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   // form values
   String currentTitle;
-  String _currentDescription;
-  List<String> _currentUsers;
-  DateTime _currentDeadline;
-  _TaskAddFormState({this.currentTitle});
-
+  String currentDescription;
+  List<String> currentUsers;
+  DateTime currentDeadline;
   //MULTI SELECT FUNCTION
 
   List<MultiSelectDialogItem<String>> multiItem = List();
@@ -143,15 +143,15 @@ class _TaskAddFormState extends State<TaskAddForm> {
       builder: (BuildContext context) {
         return MultiSelectDialog(
           items: items,
-          initialSelectedValues: (_currentUsers != null
-              ? _currentUsers.toSet()
+          initialSelectedValues: (currentUsers != null
+              ? currentUsers.toSet()
               : null), // initially select users from state
         );
       },
     );
     if (selectedValues != null && selectedValues.length != 0) {
       setState(() {
-        _currentUsers = selectedValues.toList();
+        currentUsers = selectedValues.toList();
       });
     }
     print("selectedValues: $selectedValues");
@@ -171,6 +171,12 @@ class _TaskAddFormState extends State<TaskAddForm> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    setState(() {
+      this.currentTitle = widget.initialTitle;
+      this.currentDescription = widget.initialDescription;
+      this.currentUsers = widget.initialUsers;
+      this.currentDeadline = widget.initialDeadline;
+    });
     return SingleChildScrollView(
       child: Container(
         child: Form(
@@ -198,7 +204,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                     textInputDecoration.copyWith(hintText: "Description"),
                 validator: (val) =>
                     val.isEmpty ? "Please enter description" : null,
-                onChanged: (val) => setState(() => _currentDescription = val),
+                onChanged: (val) => setState(() => currentDescription = val),
               ),
               SizedBox(
                 height: 20.0,
@@ -218,26 +224,26 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 decoration: textInputDecoration.copyWith(hintText: "Employees"),
                 validator: (val) => val.isEmpty ? "Please enter employees" : null,
                 // change [val] to proper list later, need to make this some sort of dropdown but also be able to select multiple users
-                onChanged: (val) => setState(() => _currentUsers = val.split(" ")),
+                onChanged: (val) => setState(() => currentUsers = val.split(" ")),
               ),
 */
               // (Ava) (Parul) add a date picker below (ignore all the commented code, its old stuff from the tutorials)
-              Text(_currentDeadline == null
+              Text(currentDeadline == null
                   ? 'No date has been picked yet'
-                  : _currentDeadline.toString()),
+                  : currentDeadline.toString()),
               RaisedButton(
                 child: Text('Pick a date'),
                 onPressed: () {
                   showDatePicker(
                           context: context,
-                          initialDate: _currentDeadline == null
+                          initialDate: currentDeadline == null
                               ? DateTime.now()
-                              : _currentDeadline,
+                              : currentDeadline,
                           firstDate: DateTime(2020),
                           lastDate: DateTime(2030))
                       .then((date) {
                     setState(() {
-                      _currentDeadline = date;
+                      currentDeadline = date;
                     });
                   });
                 },
@@ -280,11 +286,11 @@ class _TaskAddFormState extends State<TaskAddForm> {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(userUid: user.uid).createTask(
                       currentTitle,
-                      _currentDescription,
+                      currentDescription,
                       widget.groupData.uid,
                       user.uid,
-                      _currentUsers,
-                      _currentDeadline,
+                      currentUsers,
+                      currentDeadline,
                       false,
                     );
                     Navigator.pop(context);

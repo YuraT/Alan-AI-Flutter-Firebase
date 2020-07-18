@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/user.dart';
-import 'package:project1/screens/home/task_data_tile.dart';
+import 'package:project1/screens/home/task/task_data_tile.dart';
 import 'package:provider/provider.dart';
 
 class TasksDataList extends StatefulWidget {
@@ -32,7 +32,11 @@ class TasksDataListState extends State<TasksDataList> {
               style: TextStyle(fontSize: 12.5),),
           ),
           Text("(Uncompleted Tasks)",
-            style: TextStyle(fontSize: 12.5),),
+            style: TextStyle(
+              fontSize: 12.5,
+              height: 5.0,
+            )
+          ),
           ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -42,7 +46,11 @@ class TasksDataListState extends State<TasksDataList> {
             },
           ),
           Text("(Completed Tasks)",
-            style: TextStyle(fontSize: 12.5),),
+            style: TextStyle(
+              fontSize: 12.5,
+              height: 5.0,
+            ),
+          ),
           ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,

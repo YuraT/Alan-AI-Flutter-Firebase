@@ -4,12 +4,12 @@ import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
 import 'package:project1/route_generator.dart';
 import 'package:project1/screens/authenticate/authenticate.dart';
-import 'package:project1/screens/home/group_data_screen.dart';
-import 'package:project1/screens/home/groups_list.dart';
+import 'package:project1/screens/home/group/group_data_screen.dart';
+import 'package:project1/screens/home/group/groups_list.dart';
 import 'package:project1/screens/home/home.dart';
-import 'package:project1/screens/home/task_add_form.dart';
-import 'package:project1/screens/home/task_data_screen.dart';
-import 'package:project1/screens/home/tasks_data_list.dart';
+import 'package:project1/screens/home/task/task_add_form.dart';
+import 'package:project1/screens/home/task/task_data_screen.dart';
+import 'package:project1/screens/home/task/tasks_data_list.dart';
 import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:alan_voice/alan_voice.dart';
@@ -98,7 +98,7 @@ class _WrapperState extends State<Wrapper> {
     showModalBottomSheet(context: context, builder: (context) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-        child: TaskAddForm(groupDataScreenKey.currentState.currentGroupData, task)
+        child: TaskAddForm(groupDataScreenKey.currentState.currentGroupData, initialTitle: task)
       );
     });
 

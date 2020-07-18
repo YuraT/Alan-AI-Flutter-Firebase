@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
-import 'package:project1/screens/home/task_add_form.dart';
+import 'package:project1/screens/home/task/task_add_form.dart';
 import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:project1/screens/home/tasks_data_list.dart';
+import 'package:project1/screens/home/task/tasks_data_list.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:project1/shared/constants.dart';
 
@@ -35,7 +35,7 @@ class GroupDataScreenState extends State<GroupDataScreen> {
           builder: (context) {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-              child: TaskAddForm(currentGroupData /*widget.groupData*/, ""),
+              child: TaskAddForm(currentGroupData /*widget.groupData*/),
             );
           });
     }

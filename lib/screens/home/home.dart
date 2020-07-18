@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import 'package:project1/screens/home/groups_list.dart';
-import 'package:project1/screens/home/add_group_form.dart';
+import 'package:project1/screens/home/group/groups_list.dart';
+import 'package:project1/screens/home/group/add_group_form.dart';
 import 'package:project1/screens/home/settings_form.dart';
 import 'package:project1/services/auth.dart';
 import 'package:provider/provider.dart';
