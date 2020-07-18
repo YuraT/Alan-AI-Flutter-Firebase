@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user_data_model.dart';
-import 'package:project1/screens/home/user_data_tile.dart';
+import 'package:project1/services/database.dart';
 import 'package:project1/shared/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +37,27 @@ class ManageGroupScreenState extends State<ManageGroupScreen> {
       body: ListView.builder(
         itemCount: currentUsersData.length,
         itemBuilder: (context, index) {
-          return UserDataTile(userData: currentUsersData[index]);
+          return Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Card(
+              margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+              child: ListTile(
+                  title: Text(currentUsersData[index].username),
+                  subtitle: Text("First Name: ${currentUsersData[index].firstName}, Last Name: ${currentUsersData[index].lastName}"),
+                  trailing: IconButton(
+                    icon: Icon(Icons.remove_circle), 
+                    onPressed: () {
+                      DatabaseService().updateGroupData(
+                      currentGroupData.uid, 
+                      {"users": currentGroupData.users.remove(currentUsersData[index].uid)}
+                    ).then((value) => setState(() {
+                      currentGroupData = currentGroupData;
+                    }));
+                    },
+                  ),
+              ),
+            ),
+          );
         }
       ),
     );

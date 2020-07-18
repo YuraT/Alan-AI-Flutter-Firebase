@@ -48,7 +48,13 @@ class DatabaseService {
       "users": users,
     });
   }
-
+  Future updateGroupData(String groupUid, Map<String, dynamic> updates) {
+    try {
+      return groupsCollection.document(groupUid).updateData(updates);
+    } catch (e) {
+      print(e.toString());
+    }
+  } 
 
   Future createTask(String title, String description, String group, String assigner, List<String> users, DateTime deadline, bool completedStatus) async {
     try{ 
