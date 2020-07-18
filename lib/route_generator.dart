@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/screens/home/group/group_data_screen.dart';
+import 'package:project1/screens/home/group/manage_group_screen.dart';
 import 'package:project1/screens/home/task/task_data_screen.dart';
 import 'package:project1/screens/wrapper.dart';
 
@@ -39,6 +40,22 @@ class RouteGenerator {
             builder: (_) => TaskDataScreen(
               taskDataScreenKey: args["taskDataScreenKey"],
               taskData: args["taskData"],
+            ),
+          );
+        }
+        // If args is not of the correct type, return an error page.
+        // You can also throw an exception while in development.
+        return _errorRoute();
+        break;
+      case '/manageGroup':
+        // Validation of correct data type
+        print(args.toString());
+        if (args is Map<String, dynamic>) {
+          // need more data type checking here
+          return MaterialPageRoute(
+            builder: (_) => ManageGroupScreen(
+              //manageGroupScreenKey: args["manageGroupScreenKey"],
+              groupData: args["groupData"],
             ),
           );
         }

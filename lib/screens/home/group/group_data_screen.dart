@@ -56,6 +56,17 @@ class GroupDataScreenState extends State<GroupDataScreen> {
             backgroundColor: a,
             elevation: 0.0,
             actions: <Widget>[
+              // check if current user is admin and display manage group button
+              if (this.currentGroupData.admins.contains(user.uid)) 
+                FlatButton.icon(
+                  icon: Icon(Icons.settings), 
+                  label: Text("Manage Group"),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/manageGroup", arguments: {
+                      "groupData" : this.currentGroupData
+                    });
+                  },
+                ),
               FlatButton.icon(
                 icon: Icon(Icons.add),
                 label: Text('Add Task',
