@@ -35,7 +35,7 @@ class GroupDataScreenState extends State<GroupDataScreen> {
           builder: (context) {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-              child: TaskAddForm(currentGroupData /*widget.groupData*/, ""),
+              child: TaskAddForm(currentGroupData /*widget.groupData*/),
             );
           });
     }
