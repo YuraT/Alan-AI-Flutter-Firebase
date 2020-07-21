@@ -149,7 +149,7 @@ class _WrapperState extends State<Wrapper> {
     }
     void _initAlanButton() async {
       // init Alan with sample project id
-      AlanVoice.addButton("db7b891a6e5f7daa61c56ee3d619bfeb2e956eca572e1d8b807a3e2338fdd0dc/stage");
+      AlanVoice.addButton("13362eada708f6f258aea1955415dde32e956eca572e1d8b807a3e2338fdd0dc/stage");
       //AlanVoice.setVisualState({"screen": "groupScreen"}.toString());
       setState(() {
         _enabled = true;
