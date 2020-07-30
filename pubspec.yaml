@@ -28,7 +28,7 @@ dependencies:
   provider: ^3.1.0
   flutter_spinkit: "^4.0.0"
   rflutter_alert: ^1.0.2
-  alan_voice: 2.0.3  
+  alan_voice: ^2.0.7
   intl: ^0.16.1
 
 dev_dependencies:

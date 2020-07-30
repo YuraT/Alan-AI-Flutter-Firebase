@@ -30,7 +30,7 @@ class ManageGroupScreenState extends State<ManageGroupScreen> {
     return Scaffold(
       backgroundColor: c,
       appBar: AppBar(
-        title: Text("M-${currentGroupData.name}"),
+        title: Text("Manage ${currentGroupData.name}"),
         backgroundColor: a,
         elevation: 0.0,
       ),

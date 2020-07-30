@@ -196,7 +196,8 @@ class _TaskAddFormState extends State<TaskAddForm> {
               ),
               TextFormField(
                 decoration:
-                    textInputDecoration.copyWith(hintText: "Description"),
+                  textInputDecoration.copyWith(hintText: "Description"),
+                initialValue: currentDescription?? "",
                 validator: (val) =>
                     val.isEmpty ? "Please enter description" : null,
                 onChanged: (val) => setState(() => currentDescription = val),
@@ -231,9 +232,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 onPressed: () {
                   showDatePicker(
                           context: context,
-                          initialDate: currentDeadline == null
-                              ? DateTime.now()
-                              : currentDeadline,
+                          initialDate: currentDeadline?? DateTime.now(),
                           firstDate: DateTime(2020),
                           lastDate: DateTime(2030))
                       .then((date) {

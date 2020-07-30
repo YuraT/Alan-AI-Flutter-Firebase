@@ -93,16 +93,16 @@ class _WrapperState extends State<Wrapper> {
     } else return null;
   }
 
-  void _handleCreateTask(String task, String groupName) {
+  void _handleCreateTask({String groupName, String title, String description}) {
     if (groupName != null) _handleEnterGroup(groupName);
     showModalBottomSheet(context: context, builder: (context) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-        child: TaskAddForm(groupDataScreenKey.currentState.currentGroupData, initialTitle: task)
+        child: TaskAddForm(groupDataScreenKey.currentState.currentGroupData, initialTitle: title, initialDescription: description,)
       );
     });
 
-    AlanVoice.playText("creating task"+ task);
+    AlanVoice.playText("creating task"+ title);
     AlanVoice.playText("group is: "+ groupName);
   }
 
@@ -128,6 +128,7 @@ class _WrapperState extends State<Wrapper> {
           break;
         case "enterGroup":
           _handleEnterGroup(command["groupName"]);
+          AlanVoice.setVisualState("{\"screen\":\"screendata\"}");
           break;
         case "readTasks":
           String _tasks = _handleReadTasks(/*command["groupName"]??*/ null);
@@ -136,11 +137,14 @@ class _WrapperState extends State<Wrapper> {
           break;
         case "createTask":
           // Create task handler
-          _handleCreateTask(command["task"], command["groupName"]);
+          _handleCreateTask(groupName: command["groupName"], title: command["task"], description: command["description"]);
           AlanVoice.playText("task added successfully.");
           break;
         case "completeTask":
           _handleCompleteCurrentTask();
+          break;
+        case "currentVisualState":
+          print("currentVisualState: ${command["visual"]}");
           break;
         case "signOut":
           // signing out handler
@@ -156,6 +160,7 @@ class _WrapperState extends State<Wrapper> {
       });
 
       AlanVoice.callbacks.add((command) => _handleCommand(command.data));
+      AlanVoice.setVisualState("{\"screen\":\"screendata\"}");
     }
     
     // return authenticate or home depending on user status

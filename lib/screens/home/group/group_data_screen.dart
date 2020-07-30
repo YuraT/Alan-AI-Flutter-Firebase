@@ -1,3 +1,4 @@
+import 'package:alan_voice/alan_voice.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
@@ -27,7 +28,10 @@ class GroupDataScreenState extends State<GroupDataScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     setState(() {
-      currentGroupData = widget.groupData; //
+      currentGroupData = widget.groupData;
+      var visual = "{\"screen\":\"GroupDataScreen\", \"data\":\"$currentGroupData\"}";
+      print("visualToString ${visual.toString()}");
+      AlanVoice.setVisualState(visual.toString());
     });
     void _showTaskAddPanel() {
       showModalBottomSheet(
@@ -58,25 +62,25 @@ class GroupDataScreenState extends State<GroupDataScreen> {
             actions: <Widget>[
               // check if current user is admin and display manage group button
               if (this.currentGroupData.admins.contains(user.uid)) 
-                FlatButton.icon(
+                IconButton(
                   icon: Icon(Icons.settings), 
-                  label: Text("Manage Group"),
+                  //label: Text("Manage Group"),
                   onPressed: () {
                     Navigator.pushNamed(context, "/manageGroup", arguments: {
                       "groupData" : this.currentGroupData
                     });
                   },
                 ),
-              FlatButton.icon(
+              IconButton(
                 icon: Icon(Icons.add),
-                label: Text('Add Task',
-                  style: TextStyle(fontSize: 15),),
+                //label: Text('Add Task',
+                //  style: TextStyle(fontSize: 15),),
                 onPressed: () => _showTaskAddPanel(),
               ),
-              FlatButton.icon(
+              IconButton(
                 icon: Icon(Icons.share),
-                label: Text('Invite',
-                  style: TextStyle(fontSize: 15),),
+                //label: Text('Invite',
+                //  style: TextStyle(fontSize: 15),),
                 onPressed: () async {
                   String vCode = await DatabaseService().getGroupInvite(
                       user.uid, /*widget.groupData*/ currentGroupData.uid);
