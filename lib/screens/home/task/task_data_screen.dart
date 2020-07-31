@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project1/models/task_data_model.dart';
+import 'package:project1/screens/wrapper.dart';
 import 'package:project1/services/database.dart';
 import 'package:project1/shared/constants.dart';
-import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
 import 'package:provider/provider.dart';
 
@@ -22,10 +23,11 @@ class TaskDataScreenState extends State<TaskDataScreen> {
   @override
   Widget build(BuildContext context) {
     setState(() {
-      currentTaskData = widget.taskData; 
+      currentTaskData = widget.taskData;
+      Wrapper.setVisuals(context);
     });
     final List<UserDataModel> _allUsers = Provider.of<List<UserDataModel>>(context);
-    final List<UserDataModel> _taskUsers = _allUsers.where((user) => currentTaskData.users.contains( user.uid)).toList();
+    final List<UserDataModel> _taskUsers = _allUsers.where((user) => currentTaskData.users.contains(user.ref)).toList();
 
     return Scaffold(
       backgroundColor: c,
@@ -39,7 +41,7 @@ class TaskDataScreenState extends State<TaskDataScreen> {
             label: Text("Complete Task"),
             onPressed: () => {
               DatabaseService().updateTaskData(
-                currentTaskData.uid, 
+                currentTaskData.ref, 
                 {"completedStatus" : true}
               ).then((val) => {
                 Navigator.pop(context)
@@ -54,7 +56,7 @@ class TaskDataScreenState extends State<TaskDataScreen> {
           Text(currentTaskData.description),
           Text("completed: ${currentTaskData.completedStatus}"),
           Text("deadline: ${currentTaskData.deadline}"),
-          Text("assigner: ${_allUsers.singleWhere((user) => user.uid == currentTaskData.assigner).username}"),
+          Text("assigner: ${_allUsers.singleWhere((user) => user.ref == currentTaskData.assigner).username}"),
           ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,

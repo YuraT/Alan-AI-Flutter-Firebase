@@ -25,7 +25,7 @@ class ManageGroupScreenState extends State<ManageGroupScreen> {
   Widget build(BuildContext context) {
     setState(() {
       currentGroupData = widget.groupData;
-      currentUsersData = Provider.of<List<UserDataModel>>(context).where((user) => currentGroupData.users.contains(user.uid) && !currentGroupData.admins.contains(user.uid)).toList();
+      currentUsersData = Provider.of<List<UserDataModel>>(context).where((user) => currentGroupData.users.contains(user.ref) && !currentGroupData.admins.contains(user.ref)).toList();
     });
     return Scaffold(
       backgroundColor: c,
@@ -48,8 +48,8 @@ class ManageGroupScreenState extends State<ManageGroupScreen> {
                     icon: Icon(Icons.remove_circle), 
                     onPressed: () {
                       DatabaseService().updateGroupData(
-                      currentGroupData.uid, 
-                      {"users": currentGroupData.users.remove(currentUsersData[index].uid)}
+                      currentGroupData.ref, 
+                      {"users": currentGroupData.users.remove(currentUsersData[index].ref)}
                     ).then((value) => setState(() {
                       currentGroupData = currentGroupData;
                     }));

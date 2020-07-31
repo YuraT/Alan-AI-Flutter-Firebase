@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project1/models/group_data_model.dart';
+import 'package:project1/models/task_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
-
 class DatabaseService {
-  final String userUid;
-  final String groupUid;
-  DatabaseService({this.userUid, this.groupUid});
+  final DocumentReference userRef;
+  final DocumentReference groupRef;
+  DatabaseService({this.userRef, this.groupRef});
 
   // collection references
   final CollectionReference usersCollection = Firestore.instance.collection("users");
@@ -17,12 +17,12 @@ class DatabaseService {
   // the usernames collection above was going to be used to have login with username, but I didn't get around to it
   
   // if there is already an invite with that group and user, return that. else create a new one
-  Future<String> getGroupInvite(String user, String group) async {
+  Future<String> getGroupInvite(DocumentReference user, DocumentReference group) async {
     QuerySnapshot invites = await invitesCollection.where("creator", isEqualTo: user).where("group", isEqualTo: group).getDocuments();
     if (invites.documents.length > 0) return invites.documents.toList()[0].documentID;
     else return createGroupInvite(user, group);
   }
-  Future<String> createGroupInvite(String user, String group) async {
+  Future<String> createGroupInvite(DocumentReference user, DocumentReference group) async {
     DocumentReference doc = invitesCollection.document();
     await doc.setData({
       "active": true,
@@ -31,32 +31,33 @@ class DatabaseService {
     });
     return doc.documentID;
   }
-  Future joinGroup(String user, String inviteUid) async {
-    return await invitesCollection.document(inviteUid).get().then((doc) { 
+  Future joinGroup(DocumentReference user, String inviteUid) async {
+    return await invitesCollection.document(inviteUid).get().then((doc) async { 
       if (doc.exists == false) {
-        throw "invite code does not exist";
-        }
-      groupsCollection.document(doc.data["group"]).updateData({
+        throw Exception("invite code does not exist");
+      }
+      
+      await groupsCollection.document(doc.data["group"].documentID).updateData({
         "users": FieldValue.arrayUnion([user])
       });
     });
   }
-  Future createGroup(String groupName, List<String> admins, List<String> users) {
+  Future createGroup(String groupName, List<DocumentReference> admins, List<DocumentReference> users) {
     return groupsCollection.document().setData({
       "name": groupName,
       "admins": admins,
       "users": users,
     });
   }
-  Future updateGroupData(String groupUid, Map<String, dynamic> updates) {
+  Future updateGroupData(DocumentReference groupRef, Map<String, dynamic> updates) {
     try {
-      return groupsCollection.document(groupUid).updateData(updates);
+      return groupRef.updateData(updates);
     } catch (e) {
       print(e.toString());
     }
   } 
 
-  Future createTask(String title, String description, String group, String assigner, List<String> users, DateTime deadline, bool completedStatus) async {
+  Future createTask(String title, String description, DocumentReference group, DocumentReference assigner, List<DocumentReference> users, DateTime deadline, bool completedStatus) async {
     try{ 
       return tasksCollection.document().setData({
       "title": title,
@@ -71,16 +72,16 @@ class DatabaseService {
       print(e.toString());
     }
   }
-  Future updateTaskData(String taskUid, Map<String, dynamic> updates) {
+  Future updateTaskData(DocumentReference taskRef, Map<String, dynamic> updates) {
     try {
-      return tasksCollection.document(taskUid).updateData(updates);
+      return taskRef.updateData(updates);
     } catch (e) {
       print(e.toString());
     }
   } 
 
   Future updateUserData(String firstName, String lastName, String username) async {
-    return await usersCollection.document(userUid).setData( {
+    return await userRef.setData( {
       "firstName" : firstName,
       "lastName" : lastName,
       "username" : username,
@@ -91,7 +92,7 @@ class DatabaseService {
   List<UserDataModel> _usersDataListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return UserDataModel(
-        uid: doc.documentID ?? '',
+        ref: doc.reference ?? '',
         firstName: doc.data["firstName"] ?? '',
         lastName: doc.data["lastName"] ?? '',
         username: doc.data["username"] ?? '',
@@ -107,7 +108,7 @@ class DatabaseService {
   List<GroupDataModel> _groupsDataListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return GroupDataModel(
-        uid: doc.documentID,
+        ref: doc.reference,
         name: doc.data["name"],
         users: List.from(doc.data["users"]),
         admins: List.from(doc.data["admins"]),
@@ -117,14 +118,14 @@ class DatabaseService {
   // get collection stream for group collection
   Stream<List<GroupDataModel>> get groups {
     // its good to know that if uid == null, the where method just wont do anything
-    return groupsCollection.where("users", arrayContains: userUid).snapshots().map(_groupsDataListFromSnapshot);
+    return groupsCollection.where("users", arrayContains: userRef).snapshots().map(_groupsDataListFromSnapshot);
   }
 
   // task data model list from snapshot
   List<TaskDataModel> _tasksListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return TaskDataModel(
-        uid: doc.documentID,
+        ref: doc.reference,
         title: doc.data["title"],
         description: doc.data["description"],
         group: doc.data["group"],
@@ -137,20 +138,21 @@ class DatabaseService {
   }
   // get collection stream for tasks, where group is equal to provided group uid (if it is provided)
   Stream<List<TaskDataModel>> get tasks {
-    return tasksCollection.where("group", isEqualTo: groupUid).where("users", arrayContains: userUid).snapshots().map(_tasksListFromSnapshot);
+    return tasksCollection.snapshots().map(_tasksListFromSnapshot);
   }
 
   // currentUserData from snapshot
   CurrentUserData _currentUserDataFromSnapshot(DocumentSnapshot documentSnapshot) {
     return CurrentUserData(
-      uid: userUid,
+      // get rid of this later
+      uid: userRef.toString(),
       firstName: documentSnapshot.data["firstName"],
       lastName: documentSnapshot.data["lastName"],
       username: documentSnapshot.data["username"]
     );
   }
   Stream<CurrentUserData> get currentUserData {
-    return usersCollection.document(userUid).snapshots().map(_currentUserDataFromSnapshot);
+    return userRef.snapshots().map(_currentUserDataFromSnapshot);
   }
 
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
+import 'package:project1/models/task_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/shared/constants.dart';
@@ -22,7 +23,7 @@ class GroupDataTile extends StatelessWidget {
           children: <Widget>[
             ListTile(
               title: Text("Group: ${groupData.name}"), // subtitle is the amount of tasks in the group assigned to the logged in user
-              subtitle: Text("Your Tasks: ${tasks.where((task) => task.group == groupData.uid && task.users.contains(Provider.of<User>(context).uid) && !task.completedStatus).length}"),
+              subtitle: Text("Your Tasks: ${tasks.where((task) => task.group == groupData.ref && task.users.contains(Provider.of<User>(context).ref) && !task.completedStatus).length}"),
               trailing: Icon(
                 Icons.arrow_forward,
                 color: b,

@@ -12,7 +12,7 @@ class RouteGenerator {
     switch (settings.name) {
       // root page
       case '/':
-        return MaterialPageRoute(builder: (_) => Wrapper());
+        return MaterialPageRoute(settings: settings, builder: (_) => Wrapper());
         break;
       case '/groupData':
         // Validation of correct data type
@@ -20,6 +20,7 @@ class RouteGenerator {
         if (args is Map<String, dynamic>) {
           // need more data type checking here
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => GroupDataScreen(
               groupDataScreenKey: args["groupDataScreenKey"],
               groupData: args["groupData"],
@@ -37,6 +38,7 @@ class RouteGenerator {
         if (args is Map<String, dynamic>) {
           // need more data type checking here
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => TaskDataScreen(
               taskDataScreenKey: args["taskDataScreenKey"],
               taskData: args["taskData"],
@@ -53,6 +55,7 @@ class RouteGenerator {
         if (args is Map<String, dynamic>) {
           // need more data type checking here
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => ManageGroupScreen(
               //manageGroupScreenKey: args["manageGroupScreenKey"],
               groupData: args["groupData"],
@@ -70,15 +73,16 @@ class RouteGenerator {
   }
 
   static Route<dynamic> _errorRoute() {
-    return MaterialPageRoute(builder: (_) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Error'),
-        ),
-        body: Center(
-          child: Text('ERROR'),
-        ),
-      );
+    return MaterialPageRoute(
+      builder: (_) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Error'),
+          ),
+          body: Center(
+            child: Text('ERROR'),
+          ),
+        );
     });
   }
 }

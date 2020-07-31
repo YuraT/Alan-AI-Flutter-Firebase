@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import "package:flutter/material.dart";
 import 'package:project1/models/group_data_model.dart';
+import 'package:project1/models/task_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
 import 'package:project1/route_generator.dart';
@@ -13,7 +16,6 @@ import 'package:project1/screens/home/task/tasks_data_list.dart';
 import 'package:project1/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:alan_voice/alan_voice.dart';
-
 // for new data just add keys here
 // might not need this with the new structure
 final Map<String, Key> keys = {
@@ -29,6 +31,23 @@ final groupDataScreenKey = GlobalKey<GroupDataScreenState>();
 final taskDataScreenKey = GlobalKey<TaskDataScreenState>();
 
 class Wrapper extends StatefulWidget {
+  static setVisuals(BuildContext context) {
+    var visuals = {
+      "screen": ModalRoute.of(context).settings.name,
+      "currentUser": Provider.of<User>(context).ref.documentID,
+      "currentData": {
+        "groupsData": groupsDataKey.currentState != null? groupsDataKey.currentState.groupsOfCurrentUser.map((group) => group.toJson()).toList() : null,
+        "tasksData": tasksDataKey.currentState != null? tasksDataKey.currentState.currentTasksData.map((task) => task.toJson()).toList() : null,
+        "groupDataScreen" : groupDataScreenKey.currentState != null? groupDataScreenKey.currentState.currentGroupData : null,
+        "taskDataScreen" : taskDataScreenKey.currentState != null? taskDataScreenKey.currentState.currentTaskData : null,
+      },
+      "global": {
+        
+      }
+    };
+    print("visualToString ${visuals.toString()}");
+    AlanVoice.setVisualState(json.encode(visuals));
+  }
   @override
   _WrapperState createState() => _WrapperState();
 }
@@ -62,13 +81,6 @@ class _WrapperState extends State<Wrapper> {
   void _handleEnterGroup(String groupName) {
     var groupData = groupsDataKey.currentState.groupsOfCurrentUser.singleWhere((group) => group.name.toLowerCase() == groupName.toLowerCase(), orElse: () => null);
     if (groupData != null) {
-      // for now it generates widges one on top of the other regardless of cotext
-      // this causes the widgets to pile up and its not good, but I didnt have time to fix it
-      // will fix later
-
-      // some context testing
-      // print("context.widget.toStringShort:");
-      // print("context.widget.toStringShort: ${context.widget.toStringShort()}");
       if (groupDataScreenKey.currentState == null){
         Navigator.of(context).pushNamed(
           '/groupData',
@@ -111,7 +123,7 @@ class _WrapperState extends State<Wrapper> {
       AlanVoice.playText("you are not on a task screen"); 
     }
     DatabaseService().updateTaskData(
-      taskDataScreenKey.currentState.currentTaskData.uid, 
+      taskDataScreenKey.currentState.currentTaskData.ref, 
       {"completedStatus": true}
     );
   }
@@ -160,7 +172,6 @@ class _WrapperState extends State<Wrapper> {
       });
 
       AlanVoice.callbacks.add((command) => _handleCommand(command.data));
-      AlanVoice.setVisualState("{\"screen\":\"screendata\"}");
     }
     
     // return authenticate or home depending on user status
@@ -194,10 +205,17 @@ class _WrapperState extends State<Wrapper> {
   }
 }*/
 
+List<TaskDataModel> handleError(BuildContext context, Object error) {
+  print("tasks error _____________________________________________________");
+  print("error context $context");
+  print("error $error");
+  return [];
+}
 
 class DataStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("DataStream rebuild");
     return MultiProvider(
       providers: [
         StreamProvider<List<UserDataModel>>.value(
@@ -206,11 +224,12 @@ class DataStream extends StatelessWidget {
         ),
         StreamProvider<List<GroupDataModel>>.value(
           value: Provider.of<User>(context) == null ? null :
-            DatabaseService(userUid: Provider.of<User>(context).uid).groups
+            DatabaseService(userRef: Provider.of<User>(context).ref).groups
         ),
         StreamProvider<List<TaskDataModel>>.value(
           value: Provider.of<User>(context) == null ? null :
-            DatabaseService(userUid: Provider.of<User>(context).uid).tasks
+            DatabaseService(/*userUid: Provider.of<User>(context).uid*/).tasks,
+          catchError: handleError,
         ),
         Provider<Map<String, Key>>.value(
           value: keys

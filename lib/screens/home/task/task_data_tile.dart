@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project1/models/task_data_model.dart';
 import 'package:project1/models/user_data_model.dart';
 import 'package:project1/shared/constants.dart';
-import 'package:project1/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -23,7 +23,7 @@ class TaskDataTile extends StatelessWidget {
           children: <Widget>[
             ListTile(
               title: Text("Task: ${taskData.title}"),
-              subtitle: Text("Desc: ${taskData.description}, \nassigner: ${users.singleWhere((user) => user.uid == taskData.assigner).username}, \nusers: ${users.where((user) => taskData.users.contains(user.uid)).map((user) => user.username)}, \ndeadline: ${DateFormat("M/d/y").format(taskData.deadline)}"),
+              subtitle: Text("Desc: ${taskData.description}, \nassigner: ${users.singleWhere((user) => user.ref == taskData.assigner).username}, \nusers: ${users.where((user) => taskData.users.contains(user.ref)).map((user) => user.username)}, \ndeadline: ${DateFormat("M/d/y").format(taskData.deadline)}"),
               trailing: Icon(
                 Icons.arrow_forward,
                 color: b,

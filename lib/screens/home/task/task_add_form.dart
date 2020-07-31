@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/user.dart';
@@ -8,26 +9,26 @@ import 'package:provider/provider.dart';
 
 // START StackOverflow Code
 
-class MultiSelectDialogItem<V> {
+class MultiSelectDialogItem<T> {
   const MultiSelectDialogItem(this.value, this.label);
 
-  final V value;
+  final T value;
   final String label;
 }
 
-class MultiSelectDialog<V> extends StatefulWidget {
+class MultiSelectDialog<T> extends StatefulWidget {
   MultiSelectDialog({Key key, this.items, this.initialSelectedValues})
       : super(key: key);
 
-  final List<MultiSelectDialogItem<V>> items;
-  final Set<V> initialSelectedValues;
+  final List<MultiSelectDialogItem<T>> items;
+  final Set<T> initialSelectedValues;
 
   @override
-  State<StatefulWidget> createState() => _MultiSelectDialogState<V>();
+  State<StatefulWidget> createState() => _MultiSelectDialogState<T>();
 }
 
-class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
-  final _selectedValues = Set<V>();
+class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
+  final _selectedValues = Set<T>();
 
   void initState() {
     super.initState();
@@ -36,7 +37,7 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
     }
   }
 
-  void _onItemCheckedChange(V itemValue, bool checked) {
+  void _onItemCheckedChange(T itemValue, bool checked) {
     setState(() {
       if (checked) {
         _selectedValues.add(itemValue);
@@ -82,7 +83,7 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
     );
   }
 
-  Widget _buildItem(MultiSelectDialogItem<V> item) {
+  Widget _buildItem(MultiSelectDialogItem<T> item) {
     final checked = _selectedValues.contains(item.value);
     return CheckboxListTile(
       value: checked,
@@ -99,7 +100,7 @@ class TaskAddForm extends StatefulWidget {
   final GroupDataModel groupData;
   final String initialTitle;
   final String initialDescription;
-  final List<String> initialUsers;
+  final List<DocumentReference> initialUsers;
   final DateTime initialDeadline;
   @override
   TaskAddForm(this.groupData, {this.initialTitle, this.initialDescription, this.initialUsers, this.initialDeadline});
@@ -112,34 +113,34 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   // form values
   String currentTitle;
-  String currentDescription;
-  List<String> currentUsers;
+  String currentDescription;  
+  List<DocumentReference> currentUsers;
   DateTime currentDeadline;
   _TaskAddFormState({this.currentTitle, this.currentDescription, this.currentUsers, this.currentDeadline});
   //MULTI SELECT FUNCTION
 
-  List<MultiSelectDialogItem<String>> multiItem = List();
+  List<MultiSelectDialogItem<DocumentReference>> multiItem = List();
 
-  void populateMultiSelect(Map<String, String> valuesToPopulate) {
-    for (String v in valuesToPopulate.keys) {
+  void populateMultiSelect(Map<DocumentReference, String> valuesToPopulate) {
+    for (DocumentReference v in valuesToPopulate.keys) {
       multiItem.add(MultiSelectDialogItem(v, valuesToPopulate[v]));
     }
   }
 
   void _showMultiSelect(BuildContext context) async {
     multiItem = [];
-    Map<String, String> valuesToPopulate = {};
+    Map<DocumentReference, String> valuesToPopulate = {};
     Provider.of<List<UserDataModel>>(context)
-        .where((user) => widget.groupData.users.contains(user.uid))
+        .where((user) => widget.groupData.users.contains(user.ref))
         .forEach((user) {
       // have to add a method later to only let admins assign to all users
       valuesToPopulate.putIfAbsent(
-          user.uid, () => user.firstName + " " + user.lastName);
+          user.ref, () => user.firstName + " " + user.lastName);
     });
     populateMultiSelect(valuesToPopulate);
     final items = multiItem;
 
-    final selectedValues = await showDialog<Set<String>>(
+    final selectedValues = await showDialog<Set<DocumentReference>>(
       context: context,
       builder: (BuildContext context) {
         return MultiSelectDialog(
@@ -278,11 +279,11 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 ),
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
-                    await DatabaseService(userUid: user.uid).createTask(
+                    await DatabaseService(userRef: user.ref).createTask(
                       currentTitle,
                       currentDescription,
-                      widget.groupData.uid,
-                      user.uid,
+                      widget.groupData.ref,
+                      user.ref,
                       currentUsers,
                       currentDeadline,
                       false,
