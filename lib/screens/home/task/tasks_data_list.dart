@@ -4,6 +4,7 @@ import 'package:project1/models/task_data_model.dart';
 import 'package:project1/models/user.dart';
 import 'package:project1/screens/home/task/task_data_tile.dart';
 import 'package:project1/screens/wrapper.dart';
+import 'package:project1/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class TasksDataList extends StatefulWidget {
@@ -23,12 +24,13 @@ class TasksDataListState extends State<TasksDataList> {
   Widget build(BuildContext context) {
     final tasksData = Provider.of<List<TaskDataModel>>(context).where((task) => task.group == widget.group.ref).toList() ?? [];
     setState(() {
-      currentTasksData = widget.group.admins.contains(Provider.of<User>(context).ref)? tasksData : tasksData.where((task) => (task.users.contains(Provider.of<User>(context).ref) || task.assigner == Provider.of<User>(context).ref)).toList();
+      currentTasksData = tasksData?? [];//widget.group.admins.contains(Provider.of<User>(context).ref)? tasksData : tasksData.where((task) => (task.users.contains(Provider.of<User>(context).ref) || task.assigner == Provider.of<User>(context).ref)).toList();
       currentUncompletedTasksData = currentTasksData.where((task) => !task.completedStatus).toList();
       currentCompletedTasksData = currentTasksData.where((task) => task.completedStatus).toList();
       Wrapper.setVisuals(context);
     });
-    return SingleChildScrollView(
+    return currentTasksData == null? Loading() : 
+    SingleChildScrollView(
       child: Column(
         children: <Widget>[
           Padding(

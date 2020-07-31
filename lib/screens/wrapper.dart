@@ -166,7 +166,6 @@ class _WrapperState extends State<Wrapper> {
     void _initAlanButton() async {
       // init Alan with sample project id
       AlanVoice.addButton("13362eada708f6f258aea1955415dde32e956eca572e1d8b807a3e2338fdd0dc/stage");
-      //AlanVoice.setVisualState({"screen": "groupScreen"}.toString());
       setState(() {
         _enabled = true;
       });
@@ -185,51 +184,36 @@ class _WrapperState extends State<Wrapper> {
     } else {
       if (!_enabled) setState(() {_initAlanButton();});
       return Home();
-      //return Home(groupsDataKey: groupsDataKey,);
     }
   }
 }
 
-/*class Wrapper extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-
-    final user = Provider.of<User>(context);
-    
-    // return authenticate or home depending on user status
-    if (user == null) {
-      return Authenticate();
-    } else {
-      return Home();
-    }
-  }
-}*/
-
-List<TaskDataModel> handleError(BuildContext context, Object error) {
-  print("tasks error _____________________________________________________");
-  print("error context $context");
-  print("error $error");
-  return [];
-}
 
 class DataStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("DataStream rebuild");
+    return StreamProvider<List<GroupDataModel>>.value(
+      value: Provider.of<User>(context) == null ? null :
+        DatabaseService(userRef: Provider.of<User>(context).ref).groups,
+      child: _UsersAndTasks()
+    );
+  }
+}
+
+class _UsersAndTasks extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    List<GroupDataModel> groups = Provider.of<List<GroupDataModel>>(context);
     return MultiProvider(
       providers: [
-        StreamProvider<List<UserDataModel>>.value(
-          value: Provider.of<User>(context) == null ? null :
-            DatabaseService(/*add condition here later*/).users
+        StreamProvider.value(
+          value: groups == null? null : DatabaseService()
+          .users(groups.expand((group) => group.users.map((user) => user.documentID)).toList())
         ),
-        StreamProvider<List<GroupDataModel>>.value(
-          value: Provider.of<User>(context) == null ? null :
-            DatabaseService(userRef: Provider.of<User>(context).ref).groups
-        ),
-        StreamProvider<List<TaskDataModel>>.value(
-          value: Provider.of<User>(context) == null ? null :
-            DatabaseService(/*userUid: Provider.of<User>(context).uid*/).tasks,
-          catchError: handleError,
+        StreamProvider.value(
+          value: groups == null? null : DatabaseService(
+            groupRefs: groups.map((group) => group.ref).toList()
+          ).tasks
         ),
         Provider<Map<String, Key>>.value(
           value: keys

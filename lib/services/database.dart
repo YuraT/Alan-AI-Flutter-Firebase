@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/models/task_data_model.dart';
-import 'package:project1/models/user.dart';
 import 'package:project1/models/user_data_model.dart';
 class DatabaseService {
   final DocumentReference userRef;
-  final DocumentReference groupRef;
-  DatabaseService({this.userRef, this.groupRef});
+  final List<DocumentReference> groupRefs;
+  DatabaseService({this.userRef, this.groupRefs});
 
   // collection references
   final CollectionReference usersCollection = Firestore.instance.collection("users");
@@ -49,7 +48,7 @@ class DatabaseService {
       "users": users,
     });
   }
-  Future updateGroupData(DocumentReference groupRef, Map<String, dynamic> updates) {
+  Future updateGroupData(DocumentReference groupRef, Map<String, dynamic> updates) async {
     try {
       return groupRef.updateData(updates);
     } catch (e) {
@@ -72,7 +71,7 @@ class DatabaseService {
       print(e.toString());
     }
   }
-  Future updateTaskData(DocumentReference taskRef, Map<String, dynamic> updates) {
+  Future updateTaskData(DocumentReference taskRef, Map<String, dynamic> updates) async {
     try {
       return taskRef.updateData(updates);
     } catch (e) {
@@ -100,8 +99,8 @@ class DatabaseService {
     }).toList();
   }
   // get collection stream
-  Stream<List<UserDataModel>> get users {
-    return usersCollection.snapshots().map(_usersDataListFromSnapshot);
+  Stream<List<UserDataModel>> users(List<String> ids) {
+    return usersCollection.where(FieldPath.documentId, whereIn: ids).snapshots().map(_usersDataListFromSnapshot);
   }
 
   // group data model list from snsapshot
@@ -118,7 +117,7 @@ class DatabaseService {
   // get collection stream for group collection
   Stream<List<GroupDataModel>> get groups {
     // its good to know that if uid == null, the where method just wont do anything
-    return groupsCollection.where("users", arrayContains: userRef).snapshots().map(_groupsDataListFromSnapshot);
+    return groupsCollection.where("users", arrayContains: this.userRef).snapshots().map(_groupsDataListFromSnapshot);
   }
 
   // task data model list from snapshot
@@ -138,21 +137,6 @@ class DatabaseService {
   }
   // get collection stream for tasks, where group is equal to provided group uid (if it is provided)
   Stream<List<TaskDataModel>> get tasks {
-    return tasksCollection.snapshots().map(_tasksListFromSnapshot);
+    return tasksCollection.where("group", whereIn: groupRefs).snapshots().map(_tasksListFromSnapshot);
   }
-
-  // currentUserData from snapshot
-  CurrentUserData _currentUserDataFromSnapshot(DocumentSnapshot documentSnapshot) {
-    return CurrentUserData(
-      // get rid of this later
-      uid: userRef.toString(),
-      firstName: documentSnapshot.data["firstName"],
-      lastName: documentSnapshot.data["lastName"],
-      username: documentSnapshot.data["username"]
-    );
-  }
-  Stream<CurrentUserData> get currentUserData {
-    return userRef.snapshots().map(_currentUserDataFromSnapshot);
-  }
-
 }
