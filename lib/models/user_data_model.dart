@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserDataModel {
@@ -7,4 +9,13 @@ class UserDataModel {
   final String username;
 
   UserDataModel({this.ref, this.firstName, this.lastName, this.username});
+
+  String toJson() {
+    return jsonEncode({
+      "uid": this.ref.documentID,
+      "firstName": this.firstName,
+      "lastName": this.lastName,
+      "username": this.username,
+    });
+  }
 }

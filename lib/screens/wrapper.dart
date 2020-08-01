@@ -36,16 +36,18 @@ class Wrapper extends StatefulWidget {
       "screen": ModalRoute.of(context).settings.name,
       "currentUser": Provider.of<User>(context).ref.documentID,
       "currentData": {
-        "groupsData": groupsDataKey.currentState != null? groupsDataKey.currentState.groupsOfCurrentUser.map((group) => group.toJson()).toList() : null,
-        "tasksData": tasksDataKey.currentState != null? tasksDataKey.currentState.currentTasksData.map((task) => task.toJson()).toList() : null,
-        "groupDataScreen" : groupDataScreenKey.currentState != null? groupDataScreenKey.currentState.currentGroupData : null,
-        "taskDataScreen" : taskDataScreenKey.currentState != null? taskDataScreenKey.currentState.currentTaskData : null,
+        "groupsData": groupsDataKey.currentState == null? null : groupsDataKey.currentState.groupsOfCurrentUser,
+        "tasksData": tasksDataKey.currentState == null? null : tasksDataKey.currentState.currentTasksData,
+        "groupDataScreen" : groupDataScreenKey.currentState == null? null : groupDataScreenKey.currentState.currentGroupData,
+        "taskDataScreen" : taskDataScreenKey.currentState == null? null : taskDataScreenKey.currentState.currentTaskData,
       },
       "global": {
-        
+        "groups": Provider.of<List<GroupDataModel>>(context)?? [],
+        "users": Provider.of<List<UserDataModel>>(context)?? [],
+        "tasks": Provider.of<List<TaskDataModel>>(context)?? []
       }
     };
-    print("visualToString ${visuals.toString()}");
+    print("visuals ${json.encode(visuals)}");
     AlanVoice.setVisualState(json.encode(visuals));
   }
   @override
