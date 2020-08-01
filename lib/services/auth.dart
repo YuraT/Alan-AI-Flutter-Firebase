@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:project1/models/user.dart';
 import 'package:project1/services/database.dart';
@@ -7,7 +8,7 @@ class AuthService {
 
   // create object based on FirebaseUser
   User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+    return user != null ? User(ref: User.refFromUid(user.uid)) : null;
   }
 
   // auth change user stream
@@ -53,7 +54,7 @@ class AuthService {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
-      await DatabaseService(userUid: user.uid).updateUserData(firstName, lastName, username);
+      await DatabaseService(userRef: User.refFromUid(user.uid)).updateUserData(firstName, lastName, username);
       return _userFromFirebaseUser(user);
     } catch(e) {
       print(e.toString());

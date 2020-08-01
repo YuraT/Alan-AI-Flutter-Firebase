@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/group_data_model.dart';
 import 'package:project1/screens/home/group/group_data_tile.dart';
+import 'package:project1/screens/wrapper.dart';
+import 'package:project1/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class GroupsList extends StatefulWidget {
@@ -14,7 +16,10 @@ class GroupsListState extends State<GroupsList> {
   @override
   Widget build(BuildContext context) {
     final groupsData = Provider.of<List<GroupDataModel>>(context) ?? [];
-    setState(() => {groupsOfCurrentUser = groupsData});
+    setState(() {
+      groupsOfCurrentUser = groupsData;
+      Wrapper.setVisuals(context);
+    });
     /*groupsData.forEach((groupData) {
       print(groupData.name);
       print(groupData.users);
@@ -23,7 +28,8 @@ class GroupsListState extends State<GroupsList> {
     });*/
 
     //List<dynamic> lists = [groupsData, usersData];
-    return SingleChildScrollView(
+    return groupsOfCurrentUser == null? Loading():
+    SingleChildScrollView(
       child: Column(
         children: <Widget>[
           Text("This User's Groups: "),
@@ -31,9 +37,9 @@ class GroupsListState extends State<GroupsList> {
           ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: groupsData.length,
+            itemCount: groupsOfCurrentUser.length,
             itemBuilder: (context, index) {
-              return GroupDataTile(groupData: groupsData[index]);
+              return GroupDataTile(groupData: groupsOfCurrentUser[index]);
             },
           ),
         ],

@@ -1,28 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
-  final String uid;
-  User({this.uid});
-}
-
-class CurrentUserData {
-
-  final String uid;
-  final List<String> tasks;
-  final String firstName;
-  final String lastName;
-  final String username;
-
-  CurrentUserData({this.uid, this.tasks, this.firstName, this.lastName, this.username});
-}
-
-class TaskDataModel {
-  final String uid;
-  final String title;
-  final String description;
-  final String group;
-  final String assigner;
-  final List<String> users;
-  final DateTime deadline;
-  final bool completedStatus;
-
-  TaskDataModel({this.uid, this.title, this.description, this.group, this.assigner, this.users, this.deadline, this.completedStatus});
+  final DocumentReference ref;
+  User({this.ref});
+  static DocumentReference refFromUid(String uid) {
+    return Firestore.instance.collection("users").document(uid);
+  }
 }

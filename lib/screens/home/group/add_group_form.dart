@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/shared/constants.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +72,7 @@ class _AddGroupFormState extends State<AddGroupForm> {
                             if (_createFormkey.currentState.validate()) {
                               try {
                                 await DatabaseService().createGroup(
-                                    _currentCreateName, [user.uid], [user.uid]);
+                                    _currentCreateName, [user.ref], [user.ref]);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                               } catch (e) {
@@ -132,7 +133,7 @@ class _AddGroupFormState extends State<AddGroupForm> {
                             if (_joinFormkey.currentState.validate()) {
                               try {
                                 await DatabaseService()
-                                    .joinGroup(user.uid, _currentJoinCode);
+                                    .joinGroup(user.ref, _currentJoinCode);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                               } catch (e) {
