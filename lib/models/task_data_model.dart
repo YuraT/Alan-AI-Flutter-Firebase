@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskDataModel {
@@ -14,8 +12,8 @@ class TaskDataModel {
 
   TaskDataModel({this.ref, this.title, this.description, this.group, this.assigner, this.users, this.deadline, this.completedStatus});
   
-  String toJson() {
-    return jsonEncode({
+  Map toJson() {
+    return {
       "uid": this.ref.documentID,
       "title": this.title,
       "description": this.description,
@@ -24,6 +22,6 @@ class TaskDataModel {
       "users": this.users.map((user) => user.documentID).toList(),
       "deadline": this.deadline.millisecondsSinceEpoch,
       "completedStatus": this.completedStatus,
-    });
+    };
   }
 }
