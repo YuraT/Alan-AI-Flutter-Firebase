@@ -17,8 +17,8 @@ class _SignInState extends State<SignIn> {
   bool loading = false;
 
   // text field state
-  String email = '';
-  String password = '';
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   String error = '';
 
   @override
@@ -29,7 +29,6 @@ class _SignInState extends State<SignIn> {
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
             appBar: AppBar(
-
               backgroundColor: Colors.transparent,
               elevation: 0.0,
               title: Text("  TaskV"),
@@ -45,36 +44,47 @@ class _SignInState extends State<SignIn> {
             body: SingleChildScrollView(
               //height: MediaQuery.of(context).size.height,
               padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 50.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("Sign In", style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold
-                    ),),
-                    SizedBox(height: 15.0),
-                    Text("- Login to TaskV -", style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[800]
-                    ),),
-                    SizedBox(height: 28.0),
-                    TextFormField(
+              child: AutofillGroup(
+                  child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Sign In", 
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      SizedBox(height: 15.0),
+                      Text(
+                        "- Login to TaskV -", 
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey[800]
+                        ),
+                      ),
+                      SizedBox(height: 28.0),
+                      TextFormField(
+                        controller: email,
+                        autofillHints: [AutofillHints.email, AutofillHints.username],
                         decoration: InputDecoration(
                           labelText: "Email",
-                          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 12
+                          ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey[400])
                           ),
                         ),
                         validator: (val) =>
                             val.isEmpty ? "Enter an email" : null,
-                        onChanged: (val) {
-                          setState(() => email = val);
-                        }),
-                    SizedBox(height: 10.0),
-                    TextFormField(
+                      ),
+                      SizedBox(height: 10.0),
+                      TextFormField(
+                        controller: password,
+                        autofillHints: [AutofillHints.password],
                         decoration: InputDecoration(
                           labelText: "Password",
                           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
@@ -86,67 +96,70 @@ class _SignInState extends State<SignIn> {
                             ? "Enter a password 6+ symbols long"
                             : null,
                         obscureText: true,
-                        onChanged: (val) {
-                          setState(() => password = val);
-                        }),
-                    SizedBox(height: 14.0),
-                    MaterialButton(
-                      minWidth: double.infinity,
-                      height: 40,
-                      color: Colors.blue[600],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)
                       ),
-                      child: Text("Sign in",
-                          style: TextStyle(color: Colors.white, fontSize: 15)),
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          setState(() => loading = true);
-                          dynamic result = await _auth
-                              .signInWithEmailAndPassword(email, password);
-                          if (result == null) {
-                            setState(() {
-                              error = 'Problem Signing In';
-                              loading = false;
-                            });
-                            print(error);
-                          }
-                        }
-                      },
-                    ),
-                    SizedBox(height: 8.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("Don't have an account? "),
-                        FlatButton(
-                          color: Colors.transparent,
-                          textColor: Colors.black,
-                          padding: EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 0.0),
-                          onPressed: (){
-                            widget.toggleView();
-                          },
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(fontSize: 18)
-                          ),
+                      SizedBox(height: 14.0),
+                      MaterialButton(
+                        minWidth: double.infinity,
+                        height: 40,
+                        color: Colors.blue[600],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                      height: MediaQuery.of(context).size.height / 3,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
+                        child: Text(
+                          "Sign in",
+                          style: TextStyle(color: Colors.white, fontSize: 15)
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            setState(() => loading = true);
+                            dynamic result = await _auth
+                                .signInWithEmailAndPassword(email.text, password.text);
+                            if (result == null) {
+                              setState(() {
+                                error = 'Problem Signing In';
+                                loading = false;
+                              });
+                              print(error);
+                            }
+                          }
+                        },
+                      ),
+                      SizedBox(height: 8.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Don't have an account? "),
+                          FlatButton(
+                            color: Colors.transparent,
+                            textColor: Colors.black,
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 0.0),
+                            onPressed: (){
+                              widget.toggleView();
+                            },
+                            child: Text(
+                              "Sign Up",
+                              style: TextStyle(fontSize: 18)
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.0),
+                      Container(
+                        height: MediaQuery.of(context).size.height / 3,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
                             image: AssetImage("assets/login_pic.png"),
                             fit: BoxFit.cover
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Text(error,
-                        style: TextStyle(color: Colors.red, fontSize: 14.0)),
-                  ],
+                      SizedBox(height: 10.0),
+                      Text(
+                        error,
+                        style: TextStyle(color: Colors.red, fontSize: 14.0)
+                      ),
+                    ],
+                  ),
                 ),
               ),
               // anon sign in button
