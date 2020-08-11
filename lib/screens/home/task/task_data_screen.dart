@@ -36,9 +36,9 @@ class TaskDataScreenState extends State<TaskDataScreen> {
         backgroundColor: a,
         elevation: 0.0,
         actions: <Widget>[
-          FlatButton.icon(
+          IconButton(
             icon: Icon(Icons.check),
-            label: Text("Complete Task"),
+            // label: Text("Complete Task"),
             onPressed: () => {
               DatabaseService().updateTaskData(
                 currentTaskData.ref, 

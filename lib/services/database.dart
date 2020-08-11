@@ -73,7 +73,7 @@ class DatabaseService {
   }
   Future updateTaskData(DocumentReference taskRef, Map<String, dynamic> updates) async {
     try {
-      return taskRef.updateData(updates);
+      return await taskRef.updateData(updates);
     } catch (e) {
       print(e.toString());
     }

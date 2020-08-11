@@ -47,7 +47,7 @@ class Wrapper extends StatefulWidget {
         "tasks": Provider.of<List<TaskDataModel>>(context)?? []
       }
     };
-    print("visuals ${json.encode(visuals)}");
+    debugPrint("visuals ${json.encode(visuals)}", wrapWidth:1024);
     AlanVoice.setVisualState(json.encode(visuals));
   }
   @override
