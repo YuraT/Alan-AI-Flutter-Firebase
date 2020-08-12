@@ -15,8 +15,21 @@ class TaskAddForm extends StatefulWidget {
   final List<DocumentReference> initialUsers;
   final DateTime initialDeadline;
   @override
-  TaskAddForm(this.groupData, {this.initialTitle, this.initialDescription, this.initialUsers, this.initialDeadline});
-  _TaskAddFormState createState() => _TaskAddFormState(currentTitle: initialTitle, currentDescription: initialDescription, currentUsers: initialUsers, currentDeadline: initialDeadline);
+  TaskAddForm(
+    this.groupData, 
+    {
+      this.initialTitle, 
+      this.initialDescription, 
+      this.initialUsers, 
+      this.initialDeadline
+    }
+  );
+  _TaskAddFormState createState() => _TaskAddFormState(
+    title: TextEditingController(text: initialTitle), 
+    description: TextEditingController(text: initialDescription), 
+    users: initialUsers, 
+    deadline: initialDeadline
+  );
 }
 
 class _TaskAddFormState extends State<TaskAddForm> {
@@ -24,11 +37,11 @@ class _TaskAddFormState extends State<TaskAddForm> {
   //final List<String> sugars = ['0','1','2','3','4'];
 
   // form values
-  String currentTitle;
-  String currentDescription;  
-  List<DocumentReference> currentUsers;
-  DateTime currentDeadline;
-  _TaskAddFormState({this.currentTitle, this.currentDescription, this.currentUsers, this.currentDeadline});
+  TextEditingController title;
+  TextEditingController description;  
+  List<DocumentReference> users;
+  DateTime deadline;
+  _TaskAddFormState({this.title, this.description, this.users, this.deadline});
   //MULTI SELECT FUNCTION
 
   List<MultiSelectDialogItem<DocumentReference>> multiItem = List();
@@ -57,15 +70,15 @@ class _TaskAddFormState extends State<TaskAddForm> {
       builder: (BuildContext context) {
         return MultiSelectDialog(
           items: items,
-          initialSelectedValues: (currentUsers != null
-              ? currentUsers.toSet()
+          initialSelectedValues: (users != null
+              ? users.toSet()
               : null), // initially select users from state
         );
       },
     );
     if (selectedValues != null && selectedValues.length != 0) {
       setState(() {
-        currentUsers = selectedValues.toList();
+        users = selectedValues.toList();
       });
     }
     print("selectedValues: $selectedValues");
@@ -80,7 +93,6 @@ class _TaskAddFormState extends State<TaskAddForm> {
     }
   }*/
 
-  //MULTI SELECT FUNCTION
 
   @override
   Widget build(BuildContext context) {
@@ -99,21 +111,19 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 height: 20.0,
               ),
               TextFormField(
+                controller: title,
                 decoration: textInputDecoration.copyWith(hintText: "Title"),
-                initialValue: currentTitle ?? "",
                 validator: (val) => val.isEmpty ? "Please enter title" : null,
-                onChanged: (val) => setState(() => currentTitle = val),
               ),
               SizedBox(
                 height: 20.0,
               ),
               TextFormField(
+                controller: description,
                 decoration:
                   textInputDecoration.copyWith(hintText: "Description"),
-                initialValue: currentDescription?? "",
                 validator: (val) =>
                     val.isEmpty ? "Please enter description" : null,
-                onChanged: (val) => setState(() => currentDescription = val),
               ),
               SizedBox(
                 height: 20.0,
@@ -133,24 +143,24 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 decoration: textInputDecoration.copyWith(hintText: "Employees"),
                 validator: (val) => val.isEmpty ? "Please enter employees" : null,
                 // change [val] to proper list later, need to make this some sort of dropdown but also be able to select multiple users
-                onChanged: (val) => setState(() => currentUsers = val.split(" ")),
+                onChanged: (val) => setState(() => users = val.split(" ")),
               ),
 */
               // (Ava) (Parul) add a date picker below (ignore all the commented code, its old stuff from the tutorials)
-              Text(currentDeadline == null
+              Text(deadline == null
                   ? 'No date has been picked yet'
-                  : currentDeadline.toString()),
+                  : deadline.toString()),
               RaisedButton(
                 child: Text('Pick a date'),
                 onPressed: () {
                   showDatePicker(
                           context: context,
-                          initialDate: currentDeadline?? DateTime.now(),
+                          initialDate: deadline?? DateTime.now(),
                           firstDate: DateTime(2020),
                           lastDate: DateTime(2030))
                       .then((date) {
                     setState(() {
-                      currentDeadline = date;
+                      deadline = date;
                     });
                   });
                 },
@@ -182,7 +192,16 @@ class _TaskAddFormState extends State<TaskAddForm> {
                   divisions: 8,
                   onChanged: (val) => setState(() => _currentStrength = val.round()),
                 ),*/
-
+              RaisedButton(
+                color: b,
+                child: Text(
+                  "test button",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  title.text = "tudun";
+                }
+              ),
               RaisedButton(
                 color: b,
                 child: Text(
@@ -191,13 +210,13 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 ),
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
-                    await DatabaseService(userRef: user.ref).createTask(
-                      currentTitle,
-                      currentDescription,
+                    await DatabaseService().createTask(
+                      title.text,
+                      description.text,
                       widget.groupData.ref,
                       user.ref,
-                      currentUsers,
-                      currentDeadline,
+                      users,
+                      deadline,
                       false,
                     );
                     Navigator.pop(context);
